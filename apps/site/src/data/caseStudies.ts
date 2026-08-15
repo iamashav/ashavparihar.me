@@ -1,9 +1,6 @@
-export type CaseStudyStatus = 'shipped' | 'in-progress';
-
 export interface CaseStudy {
   id: string;
   title: string;
-  status: CaseStudyStatus;
   summary: string;
   narrative: string[];
   tech: string[];
@@ -13,7 +10,6 @@ export const caseStudies: CaseStudy[] = [
   {
     id: 'vue-to-react-migration',
     title: 'Leading a Vue → React migration',
-    status: 'shipped',
     summary:
       'Identified the cost of running two frontend frameworks in parallel and drove the decision to consolidate fully on React.',
     narrative: [
@@ -26,20 +22,18 @@ export const caseStudies: CaseStudy[] = [
   {
     id: 'jira-to-pr-agent',
     title: 'AI agent: Jira ticket → pull request',
-    status: 'in-progress',
     summary:
       'An internal tool that turns a triaged ticket into a review-ready PR, cutting the ritual overhead out of small-to-medium tasks.',
     narrative: [
       'Small-to-medium tickets lose a disproportionate amount of time to process — triage, assignment, implementation, then the PR itself. The goal is to compress that into effectively one click.',
       'A human assigns the bot to a Jira ticket; it triages and comments on the ticket, implements the change, and opens a complete pull request. Standard CI (tests, linting) runs on the PR like any other, and the bot keeps responding to review comments until a human approves and merges.',
-      'Design phase is complete and was presented and approved internally; the build is currently in progress.',
+      'Designed and approved internally, then built and shipped — it now turns assigned tickets into review-ready PRs in day-to-day use.',
     ],
     tech: ['Claude', 'GitHub Actions', 'Jira API', 'Node.js'],
   },
   {
     id: 'ai-article-pipeline',
     title: 'Automated AI article generation & publishing',
-    status: 'shipped',
     summary:
       'A daily pipeline that drafts articles and images, routes them through human review on Slack, and publishes automatically once approved.',
     narrative: [

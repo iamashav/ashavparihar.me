@@ -23,15 +23,6 @@ export function CaseStudies() {
           >
             <div className="case-studies__cell-head">
               <span className="case-studies__num">{String(index + 1).padStart(2, '0')}</span>
-              <span
-                className={
-                  study.status === 'shipped'
-                    ? 'case-studies__badge'
-                    : 'case-studies__badge--progress'
-                }
-              >
-                {study.status === 'shipped' ? 'Shipped' : 'In progress'}
-              </span>
             </div>
 
             <h3 className="case-studies__title">{study.title}</h3>
