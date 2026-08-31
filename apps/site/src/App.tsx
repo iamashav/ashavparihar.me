@@ -8,7 +8,7 @@ import { Preloader } from './components/Preloader/Preloader';
 import { Projects } from './components/Projects/Projects';
 import { RetroCursor } from './components/RetroCursor/RetroCursor';
 import { ScreenOverlay } from './components/ScreenOverlay/ScreenOverlay';
-import { TechStrip } from './components/TechStrip/TechStrip';
+import { SystemCapabilities } from './components/SystemCapabilities/SystemCapabilities';
 import { SmoothScrollProvider } from './providers/SmoothScrollProvider';
 import { usePrefersReducedMotion } from './hooks/usePrefersReducedMotion';
 
@@ -26,7 +26,7 @@ function App() {
         <HeroSection />
         <CaseStudies />
         <Projects />
-        <TechStrip />
+        <SystemCapabilities />
         <Contact />
       </main>
       <Footer />
