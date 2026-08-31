@@ -4,17 +4,16 @@ import { Footer } from './components/Footer/Footer';
 import { Header } from './components/Header/Header';
 import { Hero } from './components/Hero/Hero';
 import { Projects } from './components/Projects/Projects';
-import { Scrollbar } from './components/Scrollbar/Scrollbar';
+import { RetroCursor } from './components/RetroCursor/RetroCursor';
+import { ScreenOverlay } from './components/ScreenOverlay/ScreenOverlay';
 import { TechStrip } from './components/TechStrip/TechStrip';
-import { useReveal } from './hooks/useReveal';
-import { useSmoothScroll } from './hooks/useSmoothScroll';
+import { SmoothScrollProvider } from './providers/SmoothScrollProvider';
 
 function App() {
-  useSmoothScroll();
-  useReveal();
-
   return (
-    <>
+    <SmoothScrollProvider>
+      <ScreenOverlay />
+      <RetroCursor />
       <Header />
       <main>
         <Hero />
@@ -24,8 +23,7 @@ function App() {
         <Contact />
       </main>
       <Footer />
-      <Scrollbar />
-    </>
+    </SmoothScrollProvider>
   );
 }
 

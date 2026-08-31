@@ -1,8 +1,0 @@
-// Sass variables, not CSS custom properties — `@media` conditions can't
-// read custom properties at all, so this token has to stay build-time.
-// Kept in px, not rem: media queries in px are simpler and behave
-// predictably in all current browsers.
-$bp-mobile: 480px;
-$bp-tablet: 768px;
-$bp-desktop: 1024px;
-$bp-wide: 1280px;

@@ -1,4 +1,4 @@
-import './tech-strip.scss';
+import { Reveal } from '../Reveal/Reveal';
 
 const tech = [
   'React',
@@ -26,20 +26,23 @@ const tech = [
 
 export function TechStrip() {
   return (
-    <section className="tech-strip" aria-label="Technologies I work with">
-      <p className="tech-strip__label">Toolbox</p>
-      <div className="tech-strip__field" aria-hidden="true">
-        {tech.map((item) => (
-          <span className="tech-strip__chip" key={item}>
-            {item}
-          </span>
-        ))}
-      </div>
-      <ul className="tech-strip__sr">
-        {tech.map((item) => (
-          <li key={item}>{item}</li>
-        ))}
-      </ul>
+    <section
+      className="border-b border-panel-border px-6 py-24 md:px-10"
+      aria-label="Technologies I work with"
+    >
+      <Reveal>
+        <h2 className="label text-phosphor">Toolbox</h2>
+      </Reveal>
+
+      <Reveal>
+        <ul className="mt-10 flex flex-wrap gap-2">
+          {tech.map((item) => (
+            <li key={item} className="label border border-panel-border px-3 py-2 text-muted">
+              {item}
+            </li>
+          ))}
+        </ul>
+      </Reveal>
     </section>
   );
 }
