@@ -5,9 +5,13 @@ export interface ProjectImage {
   alt: string;
 }
 
+export type ProjectStatus = 'LIVE' | 'ARCHIVED';
+
 export interface Project {
   id: string;
   index: string;
+  role: string;
+  status: ProjectStatus;
   title: string;
   description: string;
   tech: string[];
@@ -20,6 +24,8 @@ export const projects: Project[] = [
   {
     id: 'burger-builder',
     index: '01',
+    role: 'Solo build',
+    status: 'LIVE',
     title: 'Burger Builder',
     description:
       'A build-your-own-burger app with a live order summary and checkout flow, backed by a Redux store.',
@@ -36,6 +42,8 @@ export const projects: Project[] = [
   {
     id: 'shopping-cart',
     index: '02',
+    role: 'Solo build',
+    status: 'LIVE',
     title: 'Shopping Cart',
     description:
       'An e-commerce storefront with Stripe checkout, built on Commerce.js for product and cart data.',
@@ -52,6 +60,8 @@ export const projects: Project[] = [
   {
     id: 'my-chat',
     index: '03',
+    role: 'Solo build',
+    status: 'LIVE',
     title: 'My Chat',
     description: 'A real-time chat app with Firebase-backed authentication and messaging.',
     tech: ['React', 'Firebase'],
@@ -67,6 +77,8 @@ export const projects: Project[] = [
   {
     id: 'movie-watchlist',
     index: '04',
+    role: 'Solo build',
+    status: 'LIVE',
     title: 'Movie Watchlist',
     description: 'A watchlist app for tracking movies to watch, built with hooks and the Context API.',
     tech: ['React', 'Hooks', 'Context API'],
