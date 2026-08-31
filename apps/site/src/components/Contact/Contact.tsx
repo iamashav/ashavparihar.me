@@ -61,7 +61,7 @@ export function Contact() {
             <a
               href="https://linkedin.com/in/ashavparihar/"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 transition-colors hover:text-phosphor"
             >
               <ArrowUpRight className="size-3.5" aria-hidden="true" />
@@ -70,7 +70,7 @@ export function Contact() {
             <a
               href="https://github.com/iamashav"
               target="_blank"
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="inline-flex items-center gap-2 transition-colors hover:text-phosphor"
             >
               <ArrowUpRight className="size-3.5" aria-hidden="true" />
