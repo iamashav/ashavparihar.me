@@ -31,7 +31,7 @@ describe('App shell', () => {
     expect(
       screen.getByRole('heading', { level: 1, name: /ashav parihar/i }),
     ).toBeInTheDocument();
-    ['Case Studies', 'Projects', 'Toolbox', 'Contact'].forEach((heading) => {
+    ['Case Studies', 'Projects', 'System capabilities', 'Contact'].forEach((heading) => {
       expect(screen.getByRole('heading', { level: 2, name: heading })).toBeInTheDocument();
     });
     expect(container.querySelector('.scanlines')).toBeInTheDocument();
