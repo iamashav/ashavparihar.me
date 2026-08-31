@@ -36,3 +36,7 @@ if (!globalThis.IntersectionObserver) {
     }
   };
 }
+
+// jsdom cannot back a canvas and logs "Not implemented" for every getContext call; returning null
+// is exactly the signal the canvas components already guard against.
+HTMLCanvasElement.prototype.getContext = () => null;
