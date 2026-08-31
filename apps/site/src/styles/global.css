@@ -1,0 +1,97 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-void: #080808;
+  --color-panel: #0f0f11;
+  --color-panel-border: #1f1f24;
+  --color-phosphor: #00ff66;
+  --color-amber: #ffb000;
+  --color-glitch: #00f0ff;
+  --color-muted: #6e6e77;
+
+  --font-display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, Consolas, monospace;
+
+  /* Brutalist: no radius exists in the system, so `rounded-*` can't be reached for by accident. */
+  --radius-*: initial;
+}
+
+@layer base {
+  *,
+  *::before,
+  *::after {
+    /* Tailwind defaults `border` to currentColor; the harsh 1px panel rule is the house border. */
+    border-color: var(--color-panel-border);
+  }
+
+  html {
+    scrollbar-width: none;
+  }
+
+  ::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+
+  @media (pointer: fine) {
+    html,
+    a,
+    button,
+    [role='button'] {
+      cursor: none;
+    }
+  }
+
+  body {
+    background-color: var(--color-void);
+    color: #f2f2f2;
+    font-family: var(--font-mono);
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 0.95;
+    text-transform: uppercase;
+  }
+
+  ::selection {
+    background: var(--color-phosphor);
+    color: var(--color-void);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-phosphor);
+    outline-offset: 2px;
+  }
+}
+
+@utility scanlines {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='2' height='4'%3E%3Crect width='2' height='2' fill='%23ffffff'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  opacity: 0.04;
+}
+
+@utility vignette {
+  background: radial-gradient(ellipse at center, transparent 55%, rgb(0 0 0 / 0.55) 100%);
+}
+
+@utility text-micro {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+@utility label {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
