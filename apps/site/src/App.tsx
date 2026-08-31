@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import { CaseStudies } from './components/CaseStudies/CaseStudies';
-import { Contact } from './components/Contact/Contact';
-import { Footer } from './components/Footer/Footer';
 import { Header } from './components/Header/Header';
 import { HeroSection } from './components/HeroSection/HeroSection';
 import { Preloader } from './components/Preloader/Preloader';
-import { Projects } from './components/Projects/Projects';
+import { ProjectDirectory } from './components/ProjectDirectory/ProjectDirectory';
 import { RetroCursor } from './components/RetroCursor/RetroCursor';
 import { ScreenOverlay } from './components/ScreenOverlay/ScreenOverlay';
 import { SystemCapabilities } from './components/SystemCapabilities/SystemCapabilities';
+import { SystemTerminalFooter } from './components/SystemTerminalFooter/SystemTerminalFooter';
 import { SmoothScrollProvider } from './providers/SmoothScrollProvider';
 import { usePrefersReducedMotion } from './hooks/usePrefersReducedMotion';
 
@@ -25,11 +24,10 @@ function App() {
       <main>
         <HeroSection />
         <CaseStudies />
-        <Projects />
+        <ProjectDirectory />
         <SystemCapabilities />
-        <Contact />
       </main>
-      <Footer />
+      <SystemTerminalFooter />
     </SmoothScrollProvider>
   );
 }
