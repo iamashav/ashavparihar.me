@@ -1,4 +1,5 @@
-import './contact.scss';
+import { ArrowUpRight } from 'lucide-react';
+import { Reveal } from '../Reveal/Reveal';
 
 const EMAIL = 'ashavparihar7@gmail.com';
 
@@ -46,32 +47,53 @@ const QR_PATH = QR_ROWS.map((row, y) =>
 
 export function Contact() {
   return (
-    <section className="contact" id="contact">
-      <div className="contact__inner">
-        <div className="contact__cta">
-          <h2 className="contact__heading">Let&apos;s talk</h2>
-          <div className="contact__links">
+    <section id="contact" className="border-b border-panel-border px-6 py-24 md:px-10">
+      <Reveal>
+        <h2 className="label text-phosphor">Contact</h2>
+      </Reveal>
+
+      <Reveal className="mt-12 flex flex-col gap-12 md:flex-row md:items-end md:justify-between">
+        <div>
+          <p className="font-display text-[clamp(2rem,6vw,4.5rem)] leading-none font-bold uppercase">
+            Let&apos;s talk
+          </p>
+          <div className="label mt-8 flex gap-6">
             <a
-              className="contact__link"
               href="https://linkedin.com/in/ashavparihar/"
               target="_blank"
               rel="noreferrer"
+              className="inline-flex items-center gap-2 transition-colors hover:text-phosphor"
             >
+              <ArrowUpRight className="size-3.5" aria-hidden="true" />
               LinkedIn
             </a>
-            <a className="contact__link" href="https://github.com/iamashav" target="_blank" rel="noreferrer">
+            <a
+              href="https://github.com/iamashav"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-2 transition-colors hover:text-phosphor"
+            >
+              <ArrowUpRight className="size-3.5" aria-hidden="true" />
               GitHub
             </a>
           </div>
         </div>
 
-        <a className="contact__qr" href={`mailto:${EMAIL}`} aria-label={`Email ${EMAIL}`}>
-          <svg className="contact__qr-svg" viewBox={`0 0 ${QR_SIZE} ${QR_SIZE}`} role="presentation">
+        <a
+          href={`mailto:${EMAIL}`}
+          aria-label={`Email ${EMAIL}`}
+          className="group inline-flex flex-col gap-3"
+        >
+          <svg
+            className="size-40 border border-panel-border bg-panel fill-current p-3 text-muted transition-colors group-hover:text-phosphor"
+            viewBox={`0 0 ${QR_SIZE} ${QR_SIZE}`}
+            role="presentation"
+          >
             <path d={QR_PATH} />
           </svg>
-          <span className="contact__qr-label">Scan or tap to email</span>
+          <span className="text-micro text-muted">Scan or tap to email</span>
         </a>
-      </div>
+      </Reveal>
     </section>
   );
 }

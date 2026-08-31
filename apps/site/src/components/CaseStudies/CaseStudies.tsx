@@ -1,57 +1,41 @@
 import { caseStudies } from '../../data/caseStudies';
-import './case-studies.scss';
-
-const STUDY_MODIFIERS = [
-  'case-studies__cell--featured',
-  'case-studies__cell--s2',
-  'case-studies__cell--s3',
-];
+import { Reveal } from '../Reveal/Reveal';
 
 export function CaseStudies() {
   return (
-    <section className="case-studies" id="case-studies">
-      <div className="case-studies__grid">
-        <div className="case-studies__cell case-studies__cell--label" data-reveal>
-          <h2 className="case-studies__label-title">Case Studies</h2>
-        </div>
+    <section id="case-studies" className="border-b border-panel-border px-6 py-24 md:px-10">
+      <Reveal>
+        <h2 className="label text-phosphor">Case Studies</h2>
+      </Reveal>
 
+      <div className="mt-12 space-y-px bg-panel-border">
         {caseStudies.map((study, index) => (
-          <article
-            key={study.id}
-            className={`case-studies__cell case-studies__cell--study ${STUDY_MODIFIERS[index]}`}
-            data-reveal
-          >
-            <div className="case-studies__cell-head">
-              <span className="case-studies__num">{String(index + 1).padStart(2, '0')}</span>
-            </div>
+          <Reveal key={study.id}>
+            <article className="bg-panel p-6 md:p-10">
+              <span className="label text-amber">{String(index + 1).padStart(2, '0')}</span>
 
-            <h3 className="case-studies__title">{study.title}</h3>
-            <p className="case-studies__summary">{study.summary}</p>
+              <h3 className="mt-4 max-w-3xl text-2xl md:text-4xl">{study.title}</h3>
+              <p className="mt-4 max-w-3xl text-sm text-muted">{study.summary}</p>
 
-            <div className="case-studies__narrative">
-              {study.narrative.map((paragraph) => (
-                <p key={paragraph.slice(0, 24)}>{paragraph}</p>
-              ))}
-            </div>
+              <div className="mt-6 max-w-3xl space-y-4 text-sm text-muted">
+                {study.narrative.map((paragraph) => (
+                  <p key={paragraph.slice(0, 24)}>{paragraph}</p>
+                ))}
+              </div>
 
-            <ul className="case-studies__tech">
-              {study.tech.map((tech) => (
-                <li key={tech} className="case-studies__tech-item">
-                  {tech}
-                </li>
-              ))}
-            </ul>
-          </article>
+              <ul className="mt-8 flex flex-wrap gap-2">
+                {study.tech.map((tech) => (
+                  <li
+                    key={tech}
+                    className="label border border-panel-border px-2 py-1 text-glitch"
+                  >
+                    {tech}
+                  </li>
+                ))}
+              </ul>
+            </article>
+          </Reveal>
         ))}
-
-        <div
-          className="case-studies__cell case-studies__cell--hatch case-studies__cell--h1"
-          aria-hidden="true"
-        />
-        <div
-          className="case-studies__cell case-studies__cell--hatch case-studies__cell--h2"
-          aria-hidden="true"
-        />
       </div>
     </section>
   );
