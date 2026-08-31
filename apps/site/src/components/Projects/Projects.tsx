@@ -28,7 +28,7 @@ export function Projects() {
                 <a
                   href={project.live}
                   target="_blank"
-                  rel="noreferrer"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center gap-1 transition-colors hover:text-phosphor"
                 >
                   {project.title}
@@ -49,7 +49,7 @@ export function Projects() {
               <a
                 href={project.github}
                 target="_blank"
-                rel="noreferrer"
+                rel="noopener noreferrer"
                 className="label mt-auto inline-flex items-center gap-2 pt-6 transition-colors hover:text-phosphor"
               >
                 <CodeXml className="size-3.5" aria-hidden="true" />
