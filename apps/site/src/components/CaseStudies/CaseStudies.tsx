@@ -1,16 +1,19 @@
 import { caseStudies } from '../../data/caseStudies';
-import { Reveal } from '../Reveal/Reveal';
+import { Reveal, RevealGroup, RevealItem } from '../Reveal/Reveal';
+import { ScrambleText } from '../ScrambleText/ScrambleText';
 
 export function CaseStudies() {
   return (
     <section id="case-studies" className="border-b border-panel-border px-6 py-24 md:px-10">
       <Reveal>
-        <h2 className="label text-phosphor">Case Studies</h2>
+        <h2 className="label text-phosphor">
+          <ScrambleText text="Case Studies" />
+        </h2>
       </Reveal>
 
-      <div className="mt-12 space-y-px bg-panel-border">
+      <RevealGroup className="mt-12 space-y-px bg-panel-border">
         {caseStudies.map((study, index) => (
-          <Reveal key={study.id}>
+          <RevealItem key={study.id}>
             <article className="bg-panel p-6 md:p-10">
               <span className="label text-amber">{String(index + 1).padStart(2, '0')}</span>
 
@@ -34,9 +37,9 @@ export function CaseStudies() {
                 ))}
               </ul>
             </article>
-          </Reveal>
+          </RevealItem>
         ))}
-      </div>
+      </RevealGroup>
     </section>
   );
 }
