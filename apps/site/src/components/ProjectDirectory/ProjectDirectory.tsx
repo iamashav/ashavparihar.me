@@ -1,5 +1,5 @@
-import { useRef, useState } from 'react';
-import { AnimatePresence, motion, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion';
+import { useState } from 'react';
+import { AnimatePresence, motion, useMotionValue, useSpring } from 'framer-motion';
 import { ArrowUpRight, CodeXml } from 'lucide-react';
 import { projects } from '../../data/projects';
 import type { Project } from '../../data/projects';
@@ -16,15 +16,6 @@ export function ProjectDirectory() {
   const pointerIsFine = usePointerIsFine();
   const reducedMotion = usePrefersReducedMotion();
   const [preview, setPreview] = useState<Project | null>(null);
-  const sectionRef = useRef<HTMLElement>(null);
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ['start end', 'end start'],
-  });
-  // The path bar drifts against the rows it labels, so the block reads as layered rather than flat.
-  const pathParallax = useTransform(scrollYProgress, [0, 1], [26, -26]);
-
   const x = useMotionValue(0);
   const y = useMotionValue(0);
   const springX = useSpring(x, { stiffness: 340, damping: 30, mass: 0.4 });
@@ -41,21 +32,17 @@ export function ProjectDirectory() {
   return (
     <section
       id="projects"
-      ref={sectionRef}
       className="border-b border-panel-border"
       aria-label="Projects"
     >
       <Reveal>
-        <motion.div
-          style={reducedMotion ? undefined : { y: pathParallax }}
-          className="flex flex-wrap items-center justify-between gap-3 border-b border-panel-border px-6 py-6 md:px-10"
-        >
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-panel-border px-6 py-6 md:px-10">
           <h2 className="label flex items-center gap-2 text-neutral-500">
             <ScrambleText text="~/root/selected_works/" />
             <TerminalCursor />
           </h2>
           <p className="label text-neutral-600">{projects.length} files</p>
-        </motion.div>
+        </div>
       </Reveal>
 
       <RevealGroup className="px-6 md:px-10">

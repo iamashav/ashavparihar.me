@@ -4,14 +4,14 @@ import { ScrambleText } from '../ScrambleText/ScrambleText';
 
 export function CaseStudies() {
   return (
-    <section id="case-studies" className="border-b border-panel-border px-6 py-32 md:px-10 md:py-40">
+    <section id="case-studies" className="border-b border-panel-border px-6 pt-24 pb-32 md:px-10 md:pt-28 md:pb-40">
       <Reveal>
         <h2 className="label text-neutral-500">
           <ScrambleText text="Case Studies" />
         </h2>
       </Reveal>
 
-      <RevealGroup className="mt-20 space-y-24 md:space-y-32">
+      <RevealGroup className="mt-14 space-y-24 md:space-y-32">
         {caseStudies.map((study, index) => (
           <RevealItem key={study.id}>
             <article className="border-t border-panel-border pt-12">

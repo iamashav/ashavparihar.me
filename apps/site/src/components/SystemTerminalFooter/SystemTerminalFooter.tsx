@@ -43,7 +43,7 @@ export function SystemTerminalFooter() {
 
   return (
     <footer id="contact" ref={sectionRef} className="border-t border-panel-border">
-      <div className="px-6 py-32 md:px-10 md:py-40">
+      <div className="px-6 pt-24 pb-32 md:px-10 md:pt-28 md:pb-40">
         <div className="flex flex-col gap-12 lg:flex-row lg:items-center lg:justify-between">
           <Reveal className="min-w-0">
             {/* Break opportunities at the underscores, so a narrow column wraps between words
