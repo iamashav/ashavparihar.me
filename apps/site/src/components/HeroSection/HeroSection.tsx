@@ -15,27 +15,28 @@ export function HeroSection() {
   return (
     <section id="top" className="border-b border-panel-border">
       <div className="grid md:grid-cols-2">
-        <RevealGroup className="flex flex-col justify-between gap-12 p-6 md:p-10 lg:p-14">
+        <RevealGroup className="flex flex-col justify-between gap-16 p-6 py-20 md:p-14 md:py-28 lg:p-20">
           <RevealItem className="flex items-center gap-3">
             <motion.span
+              // The one status signal that earns colour: grey here would read as "offline".
               className="size-2 bg-phosphor shadow-[0_0_12px_#00ff66]"
               animate={reducedMotion ? undefined : { opacity: [1, 0.25, 1] }}
               transition={{ duration: 1.8, repeat: Infinity, ease: 'easeInOut' }}
             />
-            <p className="label flex items-center gap-2 text-phosphor">
+            <p className="label flex items-center gap-2 text-neutral-500">
               System status: Operational
               <TerminalCursor />
             </p>
           </RevealItem>
 
           <RevealItem>
-            <p className="label text-muted">
-              Software <span className="text-glitch">//</span> Engineer
+            <p className="label text-neutral-500">
+              Software <span className="text-neutral-700">//</span> Engineer
             </p>
             <h1 className="mt-5 text-[clamp(2.75rem,7vw,6rem)]">
               <ScrambleText text="Ashav Parihar" />
             </h1>
-            <p className="mt-8 max-w-xl text-sm text-muted">{MISSION}</p>
+            <p className="mt-10 max-w-xl text-[0.9375rem] leading-loose text-neutral-400">{MISSION}</p>
           </RevealItem>
 
           <RevealItem className="flex flex-col gap-3 sm:flex-row">

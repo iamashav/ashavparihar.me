@@ -10,7 +10,7 @@ export function TerminalCursor({ className }: TerminalCursorProps) {
   return (
     <span
       aria-hidden="true"
-      className={`inline-block h-[0.9em] w-[0.5em] translate-y-[0.1em] bg-phosphor ${reducedMotion ? '' : 'animate-blink'} ${className ?? ''}`}
+      className={`inline-block h-[0.9em] w-[0.5em] translate-y-[0.1em] bg-neutral-600 ${reducedMotion ? '' : 'animate-blink'} ${className ?? ''}`}
     />
   );
 }

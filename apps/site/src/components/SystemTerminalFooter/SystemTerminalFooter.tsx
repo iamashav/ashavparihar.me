@@ -43,7 +43,7 @@ export function SystemTerminalFooter() {
 
   return (
     <footer id="contact" ref={sectionRef} className="border-t border-panel-border">
-      <div className="px-6 py-24 md:px-10">
+      <div className="px-6 py-32 md:px-10 md:py-40">
         <div className="flex flex-col gap-12 lg:flex-row lg:items-center lg:justify-between">
           <Reveal className="min-w-0">
             {/* Break opportunities at the underscores, so a narrow column wraps between words
@@ -79,12 +79,12 @@ export function SystemTerminalFooter() {
               aria-label={`Email ${EMAIL}`}
               className="group block w-64 border border-panel-border bg-panel transition-colors hover:border-phosphor"
             >
-              <span className="text-micro flex items-center justify-between border-b border-panel-border px-3 py-2 text-glitch">
+              <span className="text-micro flex items-center justify-between border-b border-panel-border px-3 py-2 text-neutral-500">
                 [SCAN: mailto.qr]
-                <span className="text-muted">□ ×</span>
+                <span className="text-neutral-700">□ ×</span>
               </span>
               <svg
-                className="w-full fill-current p-4 text-muted transition-colors group-hover:text-phosphor"
+                className="w-full fill-current p-4 text-neutral-600 transition-colors group-hover:text-phosphor"
                 viewBox={`0 0 ${QR_SIZE} ${QR_SIZE}`}
                 role="presentation"
               >
@@ -95,7 +95,7 @@ export function SystemTerminalFooter() {
         </div>
       </div>
 
-      <div className="label flex flex-col gap-4 border-t border-panel-border px-6 py-6 text-muted md:flex-row md:items-center md:justify-between md:px-10">
+      <div className="label flex flex-col gap-4 border-t border-panel-border px-6 py-8 text-neutral-600 md:flex-row md:items-center md:justify-between md:px-10">
         <p>
           SYS_TIME {now.toLocaleTimeString('en-GB', { hour12: false })} {offsetLabel(now)}
         </p>
