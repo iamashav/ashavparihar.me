@@ -53,6 +53,19 @@ describe('App shell', () => {
     expect(bootSequence()).not.toBeInTheDocument();
   });
 
+  it('keeps heading names stable while the scramble effect is running', () => {
+    // Motion enabled, so ScrambleText is mid-flight on first paint. The visible glyphs are
+    // decorative; the accessible name must still be the settled string.
+    setReducedMotion(false);
+    render(<App />);
+
+    ['Case Studies', '~/root/selected_works/', 'System capabilities', 'Transmit_a_message'].forEach(
+      (heading) => {
+        expect(screen.getByRole('heading', { level: 2, name: heading })).toBeInTheDocument();
+      },
+    );
+  });
+
   it('opens every external link safely in a new tab', () => {
     setReducedMotion(true);
     const { container } = render(<App />);
