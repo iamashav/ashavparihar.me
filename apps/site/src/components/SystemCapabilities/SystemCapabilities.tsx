@@ -1,10 +1,13 @@
-import { useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { useRef, useState } from 'react';
+import { AnimatePresence, motion, useInView } from 'framer-motion';
+import type { Variants } from 'framer-motion';
 import { SUBSYSTEMS, capabilities } from '../../data/capabilities';
 import type { Capability, Subsystem } from '../../data/capabilities';
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
 import { cn } from '../../lib/cn';
+import { ITEM_VARIANTS, SPRING, VIEWPORT } from '../../lib/motion';
 import { Reveal } from '../Reveal/Reveal';
+import { ScrambleText } from '../ScrambleText/ScrambleText';
 
 type Filter = Subsystem | 'ALL';
 
@@ -24,12 +27,26 @@ const ACCENTS = {
   },
 };
 
+// AnimatePresence sits between the grid and the cards, so variant state does not propagate down
+// from the grid. Each card is driven directly and staggers off its own index instead.
+const CARD_VARIANTS: Variants = {
+  ...ITEM_VARIANTS,
+  visible: (index: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { ...SPRING, delay: index * 0.07 },
+  }),
+  exit: { opacity: 0, scale: 0.96, transition: { duration: 0.18 } },
+};
+
 const accentFor = (subsystem: Subsystem) =>
   subsystem === 'DATA_INFRA' ? ACCENTS.amber : ACCENTS.cyan;
 
 export function SystemCapabilities() {
   const [activeSubsystem, setActiveSubsystem] = useState<Filter>('ALL');
   const reducedMotion = usePrefersReducedMotion();
+  const gridRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(gridRef, VIEWPORT);
 
   const visible =
     activeSubsystem === 'ALL'
@@ -43,7 +60,9 @@ export function SystemCapabilities() {
       aria-label="Technical capabilities"
     >
       <Reveal>
-        <h2 className="label text-phosphor">System capabilities</h2>
+        <h2 className="label text-phosphor">
+          <ScrambleText text="System capabilities" />
+        </h2>
       </Reveal>
 
       <Reveal>
@@ -74,12 +93,14 @@ export function SystemCapabilities() {
         </div>
       </Reveal>
 
-      <motion.div layout className="mt-8 grid gap-px md:grid-cols-2 lg:grid-cols-3">
-        <AnimatePresence mode="popLayout" initial={false}>
-          {visible.map((capability) => (
+      <motion.div ref={gridRef} layout className="mt-8 grid gap-px md:grid-cols-2 lg:grid-cols-3">
+        <AnimatePresence mode="popLayout">
+          {visible.map((capability, index) => (
             <CapabilityCard
               key={capability.id}
               capability={capability}
+              index={index}
+              inView={inView}
               reducedMotion={reducedMotion}
             />
           ))}
@@ -95,21 +116,24 @@ export function SystemCapabilities() {
 
 interface CapabilityCardProps {
   capability: Capability;
+  index: number;
+  inView: boolean;
   reducedMotion: boolean;
 }
 
-function CapabilityCard({ capability, reducedMotion }: CapabilityCardProps) {
+function CapabilityCard({ capability, index, inView, reducedMotion }: CapabilityCardProps) {
   const accent = accentFor(capability.subsystem);
   const Icon = capability.icon;
 
   return (
     <motion.article
       layout={!reducedMotion}
-      initial={{ opacity: 0, scale: 0.96 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.96 }}
+      variants={CARD_VARIANTS}
+      custom={index}
+      initial={reducedMotion ? false : 'hidden'}
+      animate={reducedMotion || inView ? 'visible' : 'hidden'}
+      exit="exit"
       whileHover={reducedMotion ? undefined : { scale: 1.02 }}
-      transition={{ duration: 0.28, ease: 'easeOut' }}
       className={cn(
         'group relative flex flex-col border border-panel-border bg-panel p-6',
         // transform is excluded so this never fights the scale Framer Motion drives inline.
