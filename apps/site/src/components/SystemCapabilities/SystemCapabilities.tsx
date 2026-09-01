@@ -14,15 +14,15 @@ type Filter = Subsystem | 'ALL';
 // Tailwind only sees class names it can read statically, so each accent is a complete literal.
 const ACCENTS = {
   cyan: {
-    icon: 'text-glitch',
-    ref: 'text-glitch/70',
-    tag: 'text-glitch',
+    icon: 'group-hover:text-glitch',
+    ref: 'text-glitch/40',
+    tag: 'group-hover:text-glitch',
     hover: 'hover:border-glitch hover:shadow-[0_0_20px_rgba(0,240,255,0.18)]',
   },
   amber: {
-    icon: 'text-amber',
-    ref: 'text-amber/70',
-    tag: 'text-amber',
+    icon: 'group-hover:text-amber',
+    ref: 'text-amber/40',
+    tag: 'group-hover:text-amber',
     hover: 'hover:border-amber hover:shadow-[0_0_20px_rgba(255,176,0,0.18)]',
   },
 };
@@ -56,11 +56,11 @@ export function SystemCapabilities() {
   return (
     <section
       id="capabilities"
-      className="border-b border-panel-border px-6 py-24 md:px-10"
+      className="border-b border-panel-border px-6 py-32 md:px-10 md:py-40"
       aria-label="Technical capabilities"
     >
       <Reveal>
-        <h2 className="label text-phosphor">
+        <h2 className="label text-neutral-500">
           <ScrambleText text="System capabilities" />
         </h2>
       </Reveal>
@@ -80,10 +80,10 @@ export function SystemCapabilities() {
                 aria-pressed={active}
                 onClick={() => setActiveSubsystem(subsystem.id)}
                 className={cn(
-                  'label border px-3 py-2 transition-colors',
+                  'label border px-4 py-3 transition-colors',
                   active
                     ? 'border-phosphor bg-phosphor text-void'
-                    : 'border-panel-border text-muted hover:border-phosphor hover:text-phosphor',
+                    : 'border-panel-border text-neutral-500 hover:border-phosphor hover:text-phosphor',
                 )}
               >
                 [ {subsystem.label} ]
@@ -93,7 +93,7 @@ export function SystemCapabilities() {
         </div>
       </Reveal>
 
-      <motion.div ref={gridRef} layout className="mt-8 grid gap-px md:grid-cols-2 lg:grid-cols-3">
+      <motion.div ref={gridRef} layout className="mt-12 grid gap-px md:grid-cols-2 lg:grid-cols-3">
         <AnimatePresence mode="popLayout">
           {visible.map((capability, index) => (
             <CapabilityCard
@@ -107,7 +107,7 @@ export function SystemCapabilities() {
         </AnimatePresence>
       </motion.div>
 
-      <p className="text-micro mt-6 text-muted">
+      <p className="text-micro mt-10 text-neutral-600">
         {visible.length} of {capabilities.length} subsystems listed
       </p>
     </section>
@@ -135,7 +135,7 @@ function CapabilityCard({ capability, index, inView, reducedMotion }: Capability
       exit="exit"
       whileHover={reducedMotion ? undefined : { scale: 1.02 }}
       className={cn(
-        'group relative flex flex-col border border-panel-border bg-panel p-6',
+        'group relative flex flex-col border border-panel-border bg-panel p-12',
         // transform is excluded so this never fights the scale Framer Motion drives inline.
         'transition-[background-color,border-color,box-shadow] duration-200',
         // Scaling grows the card over its neighbours, and later siblings paint on top, so without
@@ -145,16 +145,16 @@ function CapabilityCard({ capability, index, inView, reducedMotion }: Capability
       )}
     >
       <header className="flex items-start justify-between gap-4">
-        <Icon className={cn('size-5', accent.icon)} aria-hidden="true" />
+        <Icon className={cn('size-5 text-neutral-600 transition-colors', accent.icon)} aria-hidden="true" />
         <span className={cn('text-micro', accent.ref)}>{capability.ref}</span>
       </header>
 
-      <h3 className="mt-6 text-xl">{capability.title}</h3>
-      <p className="mt-3 text-sm text-muted">{capability.summary}</p>
+      <h3 className="mt-10 text-xl">{capability.title}</h3>
+      <p className="mt-4 text-[0.9375rem] leading-relaxed text-neutral-400">{capability.summary}</p>
 
-      <ul className="mt-6 flex flex-wrap gap-x-3 gap-y-1">
+      <ul className="mt-10 flex flex-wrap gap-x-4 gap-y-2">
         {capability.tags.map((tag) => (
-          <li key={tag} className={cn('text-micro', accent.tag)}>
+          <li key={tag} className={cn('text-micro text-neutral-600 transition-colors', accent.tag)}>
             {tag}
           </li>
         ))}

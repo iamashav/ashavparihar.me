@@ -48,13 +48,13 @@ export function ProjectDirectory() {
       <Reveal>
         <motion.div
           style={reducedMotion ? undefined : { y: pathParallax }}
-          className="flex flex-wrap items-center justify-between gap-3 border-b border-panel-border px-6 py-4 md:px-10"
+          className="flex flex-wrap items-center justify-between gap-3 border-b border-panel-border px-6 py-6 md:px-10"
         >
-          <h2 className="label flex items-center gap-2 text-phosphor">
+          <h2 className="label flex items-center gap-2 text-neutral-500">
             <ScrambleText text="~/root/selected_works/" />
             <TerminalCursor />
           </h2>
-          <p className="label text-muted">{projects.length} files</p>
+          <p className="label text-neutral-600">{projects.length} files</p>
         </motion.div>
       </Reveal>
 
@@ -62,7 +62,7 @@ export function ProjectDirectory() {
         {projects.map((project) => (
           <RevealItem key={project.id}>
             <div
-              className="group relative grid items-center gap-x-6 gap-y-2 border-b border-panel-border py-7 transition-colors hover:bg-panel md:grid-cols-[3rem_minmax(0,1fr)_7rem_minmax(0,15rem)_5rem_5rem]"
+              className="group relative grid items-center gap-x-6 gap-y-2 border-b border-panel-border py-10 transition-colors hover:bg-panel md:grid-cols-[3rem_minmax(0,1fr)_7rem_minmax(0,15rem)_5rem_5rem]"
               onPointerEnter={(event) => {
                 if (!previewEnabled) return;
                 // Jump rather than animate: the springs rest at 0,0, so without this the first
@@ -76,7 +76,7 @@ export function ProjectDirectory() {
               onPointerMove={previewEnabled ? track : undefined}
               onPointerLeave={() => setPreview(null)}
             >
-              <span className="label text-amber">{project.index}</span>
+              <span className="label text-neutral-600">{project.index}</span>
 
               <h3 className="text-2xl md:text-3xl">
                 <a
@@ -91,11 +91,11 @@ export function ProjectDirectory() {
                 </a>
               </h3>
 
-              <span className="label text-muted">{project.role}</span>
+              <span className="label text-neutral-600">{project.role}</span>
 
               <ul className="flex flex-wrap gap-x-2 gap-y-1">
                 {project.tech.map((tech) => (
-                  <li key={tech} className="text-micro text-glitch">
+                  <li key={tech} className="text-micro text-neutral-600">
                     {tech.toLowerCase().replace(/[\s.]/g, '-')}
                   </li>
                 ))}
@@ -104,14 +104,14 @@ export function ProjectDirectory() {
               <span
                 className={cn(
                   'label',
-                  project.status === 'LIVE' ? 'text-phosphor' : 'text-muted',
+                  project.status === 'LIVE' ? 'text-neutral-500' : 'text-neutral-700',
                 )}
               >
                 {project.status}
               </span>
 
               <div className="label flex items-center gap-4">
-                <span className="inline-flex items-center gap-1 text-muted group-hover:text-phosphor">
+                <span className="inline-flex items-center gap-1 text-neutral-600 group-hover:text-phosphor">
                   Execute
                   <ArrowUpRight className="size-3" aria-hidden="true" />
                 </span>
@@ -120,7 +120,7 @@ export function ProjectDirectory() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`${project.title} source on GitHub`}
-                  className="relative z-10 text-muted transition-colors hover:text-phosphor"
+                  className="relative z-10 text-neutral-600 transition-colors hover:text-phosphor"
                 >
                   <CodeXml className="size-4" aria-hidden="true" />
                 </a>
@@ -143,9 +143,9 @@ export function ProjectDirectory() {
               aria-hidden="true"
             >
               <div className="w-[22rem] -translate-y-1/2 translate-x-8 border border-panel-border bg-panel shadow-[0_0_30px_rgba(0,0,0,0.6)]">
-                <div className="text-micro flex items-center justify-between border-b border-panel-border px-3 py-2 text-glitch">
+                <div className="text-micro flex items-center justify-between border-b border-panel-border px-3 py-2 text-neutral-500">
                   <span>[PREVIEW_WINDOW: {fileName(preview)}]</span>
-                  <span className="text-muted">□ ×</span>
+                  <span className="text-neutral-700">□ ×</span>
                 </div>
                 <img
                   src={preview.image.src768}
