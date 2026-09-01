@@ -1,7 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowUpRight } from 'lucide-react';
 import { EMAIL, QR_PATH, QR_SIZE } from '../../data/contactQr';
-import { Reveal } from '../Reveal/Reveal';
+import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
+import { Reveal, RevealGroup, RevealItem } from '../Reveal/Reveal';
+import { ScrambleText } from '../ScrambleText/ScrambleText';
 
 const SOCIALS = [
   { tag: '[GH]', href: 'https://github.com/iamashav', label: 'GitHub' },
@@ -28,22 +31,34 @@ function offsetLabel(date: Date) {
 
 export function SystemTerminalFooter() {
   const now = useSystemClock();
+  const reducedMotion = usePrefersReducedMotion();
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  });
+  // The headline lags the barcode beside it, which keeps the last screen from arriving as one flat slab.
+  const headlineParallax = useTransform(scrollYProgress, [0, 1], [40, -40]);
 
   return (
-    <footer id="contact" className="border-t border-panel-border">
+    <footer id="contact" ref={sectionRef} className="border-t border-panel-border">
       <div className="px-6 py-24 md:px-10">
         <div className="flex flex-col gap-12 lg:flex-row lg:items-center lg:justify-between">
           <Reveal className="min-w-0">
             {/* Break opportunities at the underscores, so a narrow column wraps between words
                 rather than mid-word. */}
-            <h2 className="text-[clamp(2rem,7vw,6rem)]">
-              Transmit_<wbr />a_<wbr />message
-            </h2>
+            <motion.h2
+              style={reducedMotion ? undefined : { y: headlineParallax }}
+              className="text-[clamp(2rem,7vw,6rem)]"
+            >
+              <ScrambleText text="Transmit_a_message" repeatDelay={5000} />
+            </motion.h2>
 
-            <div className="mt-10 flex flex-wrap gap-3">
+            <RevealGroup className="mt-10 flex flex-wrap gap-3">
               {SOCIALS.map((social) => (
+                <RevealItem key={social.href}>
                 <a
-                  key={social.href}
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
@@ -53,8 +68,9 @@ export function SystemTerminalFooter() {
                   {social.tag}
                   <ArrowUpRight className="size-3" aria-hidden="true" />
                 </a>
+                </RevealItem>
               ))}
-            </div>
+            </RevealGroup>
           </Reveal>
 
           <Reveal className="shrink-0">

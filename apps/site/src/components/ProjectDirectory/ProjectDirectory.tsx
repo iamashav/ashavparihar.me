@@ -1,12 +1,14 @@
-import { useState } from 'react';
-import { AnimatePresence, motion, useMotionValue, useSpring } from 'framer-motion';
+import { useRef, useState } from 'react';
+import { AnimatePresence, motion, useMotionValue, useScroll, useSpring, useTransform } from 'framer-motion';
 import { ArrowUpRight, CodeXml } from 'lucide-react';
 import { projects } from '../../data/projects';
 import type { Project } from '../../data/projects';
 import { usePointerIsFine } from '../../hooks/usePointerIsFine';
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
 import { cn } from '../../lib/cn';
-import { Reveal } from '../Reveal/Reveal';
+import { Reveal, RevealGroup, RevealItem } from '../Reveal/Reveal';
+import { ScrambleText } from '../ScrambleText/ScrambleText';
+import { TerminalCursor } from '../TerminalCursor/TerminalCursor';
 
 const fileName = (project: Project) => `${project.id.replace(/-/g, '_')}.exe`;
 
@@ -14,6 +16,14 @@ export function ProjectDirectory() {
   const pointerIsFine = usePointerIsFine();
   const reducedMotion = usePrefersReducedMotion();
   const [preview, setPreview] = useState<Project | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ['start end', 'end start'],
+  });
+  // The path bar drifts against the rows it labels, so the block reads as layered rather than flat.
+  const pathParallax = useTransform(scrollYProgress, [0, 1], [26, -26]);
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -29,17 +39,28 @@ export function ProjectDirectory() {
   };
 
   return (
-    <section id="projects" className="border-b border-panel-border" aria-label="Projects">
+    <section
+      id="projects"
+      ref={sectionRef}
+      className="border-b border-panel-border"
+      aria-label="Projects"
+    >
       <Reveal>
-        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-panel-border px-6 py-4 md:px-10">
-          <h2 className="label text-phosphor">~/root/selected_works/</h2>
+        <motion.div
+          style={reducedMotion ? undefined : { y: pathParallax }}
+          className="flex flex-wrap items-center justify-between gap-3 border-b border-panel-border px-6 py-4 md:px-10"
+        >
+          <h2 className="label flex items-center gap-2 text-phosphor">
+            <ScrambleText text="~/root/selected_works/" />
+            <TerminalCursor />
+          </h2>
           <p className="label text-muted">{projects.length} files</p>
-        </div>
+        </motion.div>
       </Reveal>
 
-      <div className="px-6 md:px-10">
+      <RevealGroup className="px-6 md:px-10">
         {projects.map((project) => (
-          <Reveal key={project.id}>
+          <RevealItem key={project.id}>
             <div
               className="group relative grid items-center gap-x-6 gap-y-2 border-b border-panel-border py-7 transition-colors hover:bg-panel md:grid-cols-[3rem_minmax(0,1fr)_7rem_minmax(0,15rem)_5rem_5rem]"
               onPointerEnter={(event) => {
@@ -105,9 +126,9 @@ export function ProjectDirectory() {
                 </a>
               </div>
             </div>
-          </Reveal>
+          </RevealItem>
         ))}
-      </div>
+      </RevealGroup>
 
       {previewEnabled && (
         <AnimatePresence>
