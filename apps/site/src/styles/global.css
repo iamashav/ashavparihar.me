@@ -12,8 +12,21 @@
   --font-display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, Consolas, monospace;
 
+  --animate-blink: blink 1.1s steps(1, end) infinite;
+
   /* Brutalist: no radius exists in the system, so `rounded-*` can't be reached for by accident. */
   --radius-*: initial;
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  50.01%,
+  100% {
+    opacity: 0;
+  }
 }
 
 @layer base {
