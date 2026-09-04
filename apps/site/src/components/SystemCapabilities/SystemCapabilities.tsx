@@ -56,7 +56,7 @@ export function SystemCapabilities() {
   return (
     <section
       id="capabilities"
-      className="border-b border-panel-border px-6 py-32 md:px-10 md:py-40"
+      className="border-b border-panel-border px-6 pt-24 pb-32 md:px-10 md:pt-28 md:pb-40"
       aria-label="Technical capabilities"
     >
       <Reveal>
