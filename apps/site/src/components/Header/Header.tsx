@@ -8,7 +8,7 @@ const navLinks = [
 
 export function Header() {
   return (
-    <header className="flex items-center justify-between border-b border-panel-border px-6 py-6 md:px-10">
+    <header className="flex h-(--header-h) items-center justify-between border-b border-panel-border px-6 md:px-10">
       <a
         href="#top"
         aria-label="Ashav Parihar — home"

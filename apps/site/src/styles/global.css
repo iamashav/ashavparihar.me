@@ -38,6 +38,12 @@
     border-color: var(--color-panel-border);
   }
 
+  :root {
+    /* The header is in normal flow above the hero, so the hero subtracts this to fill the
+       viewport rather than pushing its own footer content below the fold. */
+    --header-h: 4.75rem;
+  }
+
   html {
     scrollbar-width: none;
   }
