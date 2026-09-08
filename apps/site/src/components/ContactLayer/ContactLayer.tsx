@@ -190,7 +190,7 @@ export function ContactLayer() {
     >
       <div className="flex h-full flex-col stage-pad pt-24 pb-[var(--stage-gutter)]">
         <div className="flex items-baseline justify-between">
-          <span className="label">Contact</span>
+          <h2 className="label">Contact</h2>
           <div className="flex gap-6">
             {LINKS.map((link) => (
               <a key={link.href} href={link.href} {...EXTERNAL} className="label hover:line-through">

@@ -64,8 +64,11 @@ export function HeroLayer({ ready }: HeroLayerProps) {
 
         <span className="label mt-10">Frontend / Interfaces & the systems under them</span>
 
+        {/* The line break leaves no space in textContent, so the name would be announced as one
+            run-on word; the label also survives SplitText rewriting the markup underneath. */}
         <h1
           ref={nameRef}
+          aria-label="Ashav Parihar"
           className="mt-5 text-[clamp(3.5rem,18.5vw,20rem)] tracking-[-0.01em]"
         >
           Ashav
