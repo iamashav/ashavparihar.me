@@ -11,10 +11,10 @@ export const caseStudies: CaseStudy[] = [
     id: 'vue-to-react-migration',
     title: 'Consolidating a 200+ component frontend onto React',
     summary:
-      'Called out the cost of running two frontend frameworks in parallel, won the argument, and drove the consolidation end to end — 200+ components and the whole design layer underneath them.',
+      'The team already wanted off a split Vue and React stack. I started the migration and did most of the work — 200+ components plus the stores, styles and design layer underneath them — leaning on LLM tooling to get through it faster than a job that size usually goes.',
     narrative: [
-      'The product had grown to run Vue and React side by side. Every feature meant picking a side, every review needed someone fluent in the right half, and the tooling, patterns, and design primitives were maintained twice. It was a tax nobody had put a number on, and it compounded with each release.',
-      'I made the case for consolidating on React and got buy-in for work that ships no visible features — then led it. The scope was the whole system, not just the view layer: 200+ components plus the styles, design system, icons, and stores underneath them. I drove it with LLM tooling rather than by hand, and sequenced it so both frameworks kept running side by side and feature delivery never stopped.',
+      'The product had grown to run Vue and React side by side. Every feature meant picking a side, every review needed someone fluent in the right half, and the tooling, patterns, and design primitives were maintained twice. Nobody needed convincing that it was costing us; consolidating was already something we wanted to do.',
+      'What it needed was someone to pick it up and carry it, so I did. The scope was the whole system, not just the view layer: 200+ components plus the styles, design system, icons, and stores underneath them. I drove it with LLM tooling rather than by hand, which is what got it done faster than a migration this size usually takes, and sequenced it so both frameworks kept running side by side and feature delivery never stopped.',
       'The result is one stack, one set of conventions, and one thing to onboard into. It also taught me where agents genuinely hold up on large mechanical work and where they need a human steering — which is what led directly to the two projects below.',
     ],
     tech: ['React', 'Vue', 'TypeScript', 'LLM tooling'],
