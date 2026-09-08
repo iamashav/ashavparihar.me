@@ -1,34 +1,25 @@
-import { useState } from 'react';
-import { CaseStudies } from './components/CaseStudies/CaseStudies';
-import { Header } from './components/Header/Header';
-import { HeroSection } from './components/HeroSection/HeroSection';
-import { Preloader } from './components/Preloader/Preloader';
-import { ProjectDirectory } from './components/ProjectDirectory/ProjectDirectory';
-import { RetroCursor } from './components/RetroCursor/RetroCursor';
-import { ScreenOverlay } from './components/ScreenOverlay/ScreenOverlay';
-import { SystemCapabilities } from './components/SystemCapabilities/SystemCapabilities';
-import { SystemTerminalFooter } from './components/SystemTerminalFooter/SystemTerminalFooter';
-import { SmoothScrollProvider } from './providers/SmoothScrollProvider';
-import { usePrefersReducedMotion } from './hooks/usePrefersReducedMotion';
+import { useCallback, useState } from 'react';
+import { ContactLayer } from './components/ContactLayer/ContactLayer';
+import { HeroLayer } from './components/HeroLayer/HeroLayer';
+import { ProjectReel } from './components/ProjectReel/ProjectReel';
+import { WorkLayer } from './components/WorkLayer/WorkLayer';
+import { ScrollStage } from './providers/ScrollStage';
 
 function App() {
-  const reducedMotion = usePrefersReducedMotion();
-  const [booted, setBooted] = useState(false);
+  /* The hero is the loader: scroll stays locked until it has finished assembling itself, so there
+     is no separate panel to slide away and nothing to cut between. */
+  const [built, setBuilt] = useState(false);
+  const handleBuilt = useCallback(() => setBuilt(true), []);
 
   return (
-    <SmoothScrollProvider>
-      {!reducedMotion && !booted && <Preloader onComplete={() => setBooted(true)} />}
-      <ScreenOverlay />
-      <RetroCursor />
-      <Header />
+    <ScrollStage locked={!built}>
       <main>
-        <HeroSection />
-        <CaseStudies />
-        <ProjectDirectory />
-        <SystemCapabilities />
+        <HeroLayer onBuilt={handleBuilt} />
+        <WorkLayer />
+        <ProjectReel />
+        <ContactLayer />
       </main>
-      <SystemTerminalFooter />
-    </SmoothScrollProvider>
+    </ScrollStage>
   );
 }
 

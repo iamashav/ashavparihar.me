@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom/vitest';
 
-// jsdom ships none of these, and all three are read on first render (media-query hooks, Lenis, whileInView).
+// jsdom ships none of these, and each is read on first render: matchMedia by the reduced-motion
+// hook, ResizeObserver by ScrollTrigger, IntersectionObserver by Lenis.
 if (!window.matchMedia) {
   window.matchMedia = (query: string) => ({
     media: query,
@@ -13,6 +14,10 @@ if (!window.matchMedia) {
     dispatchEvent: () => false,
   });
 }
+
+// jsdom defines scrollTo but has no layout behind it, so every call logs "Not implemented". The
+// boot effect calls it once per render; overriding it outright keeps the run readable.
+window.scrollTo = () => {};
 
 if (!globalThis.ResizeObserver) {
   globalThis.ResizeObserver = class {
@@ -36,7 +41,3 @@ if (!globalThis.IntersectionObserver) {
     }
   };
 }
-
-// jsdom cannot back a canvas and logs "Not implemented" for every getContext call; returning null
-// is exactly the signal the canvas components already guard against.
-HTMLCanvasElement.prototype.getContext = () => null;

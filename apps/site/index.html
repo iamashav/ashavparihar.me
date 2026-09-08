@@ -6,7 +6,18 @@
     <link rel="alternate icon" href="/favicon.ico" />
     <link rel="manifest" href="/manifest.json" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#050505" />
+    <meta name="theme-color" content="#070f0a" />
+
+    <!--
+      Runs before the module bundle, which is deferred. ScrollTrigger caches whatever
+      history.scrollRestoration holds when it initialises and writes that value back later, and ES
+      imports evaluate the whole dependency graph before any statement in main.tsx — so setting
+      this from application code is always too late to win. The site always opens on the hero.
+    -->
+    <script>
+      if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+      window.scrollTo(0, 0);
+    </script>
     <title>Ashav Parihar — Software Engineer</title>
     <meta
       name="description"

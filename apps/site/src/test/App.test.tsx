@@ -1,6 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import App from '../App';
-
+import { caseStudies } from '../data/caseStudies';
+import { projects } from '../data/projects';
 
 const originalMatchMedia = window.matchMedia;
 
@@ -21,49 +22,25 @@ afterEach(() => {
   window.matchMedia = originalMatchMedia;
 });
 
-const bootSequence = () => screen.queryByRole('status', { name: /boot sequence/i });
-
 describe('App shell', () => {
-  it('renders the hero, every section heading and the overlay chrome', () => {
+  it('renders the hero name and every layer heading', () => {
     setReducedMotion(true);
-    const { container } = render(<App />);
+    render(<App />);
 
-    expect(
-      screen.getByRole('heading', { level: 1, name: /ashav parihar/i }),
-    ).toBeInTheDocument();
-    ['Case Studies', '~/root/selected_works/', 'System capabilities', 'Transmit_a_message'].forEach((heading) => {
-      expect(screen.getByRole('heading', { level: 2, name: heading })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: /ashav parihar/i })).toBeInTheDocument();
+
+    // Sections are h2, the items within them h3 — one level per rank, not two names sharing one.
+    expect(screen.getByRole('heading', { level: 2, name: 'Selected work' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 2, name: 'Projects' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 2, name: 'Contact' })).toBeInTheDocument();
+
+    caseStudies.forEach((study) => {
+      expect(screen.getByRole('heading', { level: 3, name: study.title })).toBeInTheDocument();
     });
-    expect(container.querySelector('.scanlines')).toBeInTheDocument();
-    expect(container.querySelector('.vignette')).toBeInTheDocument();
-    expect(container.querySelector('#screen-grain')).toBeInTheDocument();
-  });
 
-  it('plays the boot sequence on every load', () => {
-    setReducedMotion(false);
-    render(<App />);
-
-    expect(bootSequence()).toBeInTheDocument();
-  });
-
-  it('skips the boot sequence under reduced motion', () => {
-    setReducedMotion(true);
-    render(<App />);
-
-    expect(bootSequence()).not.toBeInTheDocument();
-  });
-
-  it('keeps heading names stable while the scramble effect is running', () => {
-    // Motion enabled, so ScrambleText is mid-flight on first paint. The visible glyphs are
-    // decorative; the accessible name must still be the settled string.
-    setReducedMotion(false);
-    render(<App />);
-
-    ['Case Studies', '~/root/selected_works/', 'System capabilities', 'Transmit_a_message'].forEach(
-      (heading) => {
-        expect(screen.getByRole('heading', { level: 2, name: heading })).toBeInTheDocument();
-      },
-    );
+    projects.forEach((project) => {
+      expect(screen.getByRole('heading', { level: 3, name: project.title })).toBeInTheDocument();
+    });
   });
 
   it('opens every external link safely in a new tab', () => {
@@ -76,5 +53,29 @@ describe('App shell', () => {
       expect(link).toHaveAttribute('target', '_blank');
       expect(link).toHaveAttribute('rel', 'noopener noreferrer');
     });
+  });
+
+  it('reaches the email without putting the address in the page text', () => {
+    setReducedMotion(true);
+    const { container } = render(<App />);
+
+    expect(container.querySelector('a[href^="mailto:"]')).toBeInTheDocument();
+    expect(container.textContent).not.toMatch(/@gmail\.com/);
+  });
+
+  it('keeps the hooks the hero build animates', () => {
+    setReducedMotion(false);
+    const { container } = render(<App />);
+
+    // Renaming either of these makes the opening silently do nothing, which builds and lints fine.
+    expect(container.querySelector('[data-mark]')).toBeInTheDocument();
+    expect(container.querySelectorAll('[data-rule]').length).toBeGreaterThan(0);
+  });
+
+  it('renders the hero without waiting on a build under reduced motion', () => {
+    setReducedMotion(true);
+    render(<App />);
+
+    expect(screen.getByRole('heading', { level: 1, name: /ashav parihar/i })).toBeInTheDocument();
   });
 });
