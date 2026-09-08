@@ -63,17 +63,19 @@ describe('App shell', () => {
     expect(container.textContent).not.toMatch(/@gmail\.com/);
   });
 
-  it('skips the intro under reduced motion', () => {
+  it('keeps the hooks the hero build animates', () => {
+    setReducedMotion(false);
+    const { container } = render(<App />);
+
+    // Renaming either of these makes the opening silently do nothing, which builds and lints fine.
+    expect(container.querySelector('[data-mark]')).toBeInTheDocument();
+    expect(container.querySelectorAll('[data-rule]').length).toBeGreaterThan(0);
+  });
+
+  it('renders the hero without waiting on a build under reduced motion', () => {
     setReducedMotion(true);
     render(<App />);
 
-    expect(screen.queryByText('Software Engineer')).not.toBeInTheDocument();
-  });
-
-  it('plays the intro when motion is allowed', () => {
-    setReducedMotion(false);
-    render(<App />);
-
-    expect(screen.getByText('Software Engineer')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: /ashav parihar/i })).toBeInTheDocument();
   });
 });

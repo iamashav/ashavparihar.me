@@ -28,10 +28,10 @@ export function SiteHeader() {
   return (
     <header className="flex items-center justify-between py-6">
       {/* The mark, not the name — the hero headline already says it. */}
-      <a href="#top" aria-label="Ashav Parihar — home">
+      <a href="#top" data-mark aria-label="Ashav Parihar — home">
         <Logo className="h-7 w-7" />
       </a>
-      <nav className="flex items-center gap-8">
+      <nav data-nav className="flex items-center gap-8">
         <button
           type="button"
           onClick={() => setMono((on) => !on)}
