@@ -1,10 +1,14 @@
 @import 'tailwindcss';
 
 @theme {
-  --color-flood: #00ff66;
-  --color-ink: #0a0f0a;
-  --color-bone: #f0fff4;
-  --color-shadow: #00381a;
+  /* Depth comes from leaning toward an adjacent hue, not from adding the complement — red in green
+     just desaturates toward olive. This holds red at zero and borrows from blue instead, the same
+     move that turns a flat red into a crimson. */
+  --color-flood: #00e87a;
+  --color-ink: #070f0a;
+  /* Same rule as the flood: nothing pinned at 255, and the tint leans toward cyan so the whites
+     belong to the same family as the green rather than reading as neutral paper. */
+  --color-bone: #edf9f5;
 
   --font-display: 'Anton', 'Arial Narrow', sans-serif;
   --font-body: 'Newsreader', Georgia, serif;
@@ -12,6 +16,13 @@
 
   /* Poster geometry: no radius exists in the system, so `rounded-*` can't be reached for. */
   --radius-*: initial;
+}
+
+/* Monochrome mode. Redefining the accent is the whole switch: every flooded surface and every
+   accent colour resolves through this one variable, so the site drops to ink and off-white
+   without a single component knowing the mode exists. */
+:root[data-mode='mono'] {
+  --color-flood: var(--color-bone);
 }
 
 @layer base {
