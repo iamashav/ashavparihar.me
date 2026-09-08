@@ -36,6 +36,35 @@ export function ScrollStage({ locked, children }: ScrollStageProps) {
     window.scrollTo(0, 0);
   }, []);
 
+  /* Lenis owns the scroll position, so a native anchor jump gets pulled straight back — which is
+     why an in-page link needed two clicks to take. Handle them here and land immediately rather
+     than gliding: a nav link should arrive, not travel. */
+  useEffect(() => {
+    const onClick = (event: MouseEvent) => {
+      if (event.defaultPrevented || event.button !== 0) return;
+      if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+
+      const clicked = event.target;
+      if (!(clicked instanceof Element)) return;
+
+      const anchor = clicked.closest('a');
+      if (!(anchor instanceof HTMLAnchorElement) || !anchor.hash) return;
+      if (anchor.pathname !== window.location.pathname) return;
+
+      const section = document.getElementById(anchor.hash.slice(1));
+      if (!section) return;
+
+      event.preventDefault();
+      const lenis = lenisRef.current;
+      if (lenis) lenis.scrollTo(section, { immediate: true });
+      else section.scrollIntoView();
+      history.replaceState(null, '', anchor.hash);
+    };
+
+    document.addEventListener('click', onClick);
+    return () => document.removeEventListener('click', onClick);
+  }, []);
+
   useEffect(() => {
     document.documentElement.classList.toggle('is-scroll-blocked', locked);
 
