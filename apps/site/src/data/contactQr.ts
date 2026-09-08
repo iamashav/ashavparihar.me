@@ -41,3 +41,12 @@ export const QR_PATH = QR_ROWS.map((row, y) =>
     .map((cell, x) => (cell === '1' ? `M${x} ${y}h1v1h-1z` : ''))
     .join(''),
 ).join('');
+
+/* Module coordinates for animating the code in one square at a time. QR_PATH stays for the static
+   render; this is the same matrix expressed as individually addressable cells. */
+export const QR_MODULES: { x: number; y: number }[] = [];
+QR_ROWS.forEach((row, y) => {
+  row.split('').forEach((cell, x) => {
+    if (cell === '1') QR_MODULES.push({ x, y });
+  });
+});
