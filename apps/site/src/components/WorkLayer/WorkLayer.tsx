@@ -8,38 +8,47 @@ import { Layer } from '../Layer/Layer';
 /* The ground colour flips per case, so every panel carries its own palette rather than
    inheriting the layer's. Alternating means the wipe itself reads as the transition. */
 const TONES = [
-  { panel: 'bg-flood text-ink', dim: 'text-ink/50', rule: 'border-ink/25' },
-  { panel: 'bg-ink text-bone', dim: 'text-bone/45', rule: 'border-bone/20' },
+  { panel: 'bg-flood text-ink', dim: 'text-ink/50', rule: 'border-ink/25', track: 'bg-ink/20', fill: 'bg-ink' },
+  { panel: 'bg-ink text-bone', dim: 'text-bone/45', rule: 'border-bone/20', track: 'bg-bone/20', fill: 'bg-bone' },
 ];
 
 const toneFor = (index: number) => TONES[index % TONES.length];
 
 const PANEL_GRID = 'grid gap-y-10 md:grid-cols-[1.15fr_0.85fr] md:gap-x-14';
 
-function Panel({ index, title, summary, tech }: {
+function Panel({ index, title, summary, tech, showProgress }: {
   index: number;
   title: string;
   summary: string;
   tech: string[];
+  showProgress: boolean;
 }) {
   const tone = toneFor(index);
 
   return (
-    <div className="flex h-full flex-col stage-pad pt-28 pb-[var(--stage-gutter)]">
-      <div className={cn('flex items-baseline justify-between border-b pb-5', tone.rule)}>
+    <div
+      data-panel-content
+      className="flex h-full flex-col stage-pad pt-28 pb-[var(--stage-gutter)]"
+    >
+      <div className="flex items-center justify-between pb-5">
         <span className="label">Selected work</span>
-        <ol className="flex gap-5">
-          {caseStudies.map((study, i) => (
-            <li key={study.id} className={cn('label', i === index ? 'underline' : tone.dim)}>
-              {String(i + 1).padStart(2, '0')}
-            </li>
-          ))}
-        </ol>
       </div>
 
-      <div data-panel-inner className={cn('flex-1 content-center', PANEL_GRID)}>
+      {/* The header rule doubles as the progress track, so the fill sweeps the full viewport width
+          instead of a stub too small to read as movement. */}
+      {showProgress ? (
+        <div className={cn('h-0.5 w-full', tone.track)}>
+          {/* No `scale-x-0` here: Tailwind compiles it to the standalone `scale` property, which
+              multiplies against GSAP's transform and pins the fill at zero. */}
+          <span data-progress-fill className={cn('block h-full w-full origin-left', tone.fill)} />
+        </div>
+      ) : (
+        <div className={cn('h-px w-full', tone.track)} />
+      )}
+
+      <div className={cn('flex-1 content-center', PANEL_GRID)}>
         <div>
-          <h2 data-panel-title className="text-[clamp(2.25rem,6vw,5.75rem)]">
+          <h2 data-panel-title className="text-[clamp(2rem,4.8vw,4.5rem)]">
             {title}
           </h2>
         </div>
@@ -85,6 +94,24 @@ export function WorkLayer() {
         });
       }
 
+      gsap.fromTo(
+        panels.querySelectorAll('[data-progress-fill]'),
+        { scaleX: 0 },
+        {
+          scaleX: 1,
+          /* Set explicitly rather than trusting the `origin-left` class: GSAP writes its own
+             transform-origin, and a centred origin makes the fill grow from the middle. */
+          transformOrigin: 'left center',
+          ease: 'none',
+          scrollTrigger: {
+            trigger: section,
+            start: 'top top',
+            end: 'bottom bottom',
+            scrub: 0.6,
+          },
+        },
+      );
+
       const timeline = gsap.timeline({
         scrollTrigger: {
           trigger: section,
@@ -97,17 +124,20 @@ export function WorkLayer() {
       items.forEach((item, i) => {
         if (i === 0) return;
 
+        /* Panel slides up while its content counter-slides down by the same amount, so the content
+           looks stationary and only the panel's edge sweeps — a wipe, but on transforms, which the
+           compositor can handle. Animating clip-path here repainted three full-screen layers a
+           frame and could lock the renderer up entirely. */
         timeline.fromTo(
           item,
-          { clipPath: 'inset(100% 0px 0px 0px)' },
-          { clipPath: 'inset(0% 0px 0px 0px)', duration: 1, ease: 'none' },
+          { yPercent: 100 },
+          { yPercent: 0, duration: 1, ease: 'none' },
           i - 1,
         );
 
-        /* Counter-drift so the incoming case reads as arriving rather than as a flat curtain. */
         timeline.fromTo(
-          item.querySelector('[data-panel-inner]'),
-          { yPercent: 8 },
+          item.querySelector('[data-panel-content]'),
+          { yPercent: -100 },
           { yPercent: 0, duration: 1, ease: 'none' },
           i - 1,
         );
@@ -122,7 +152,13 @@ export function WorkLayer() {
       <section id="work" className="relative z-50">
         {caseStudies.map((study, i) => (
           <article key={study.id} className={cn('min-h-svh', toneFor(i).panel)}>
-            <Panel index={i} title={study.title} summary={study.summary} tech={study.tech} />
+            <Panel
+              index={i}
+              title={study.title}
+              summary={study.summary}
+              tech={study.tech}
+              showProgress={false}
+            />
           </article>
         ))}
       </section>
@@ -139,8 +175,14 @@ export function WorkLayer() {
     >
       <div ref={panelsRef} className="relative h-full">
         {caseStudies.map((study, i) => (
-          <article key={study.id} className={cn('absolute inset-0', toneFor(i).panel)}>
-            <Panel index={i} title={study.title} summary={study.summary} tech={study.tech} />
+          <article key={study.id} className={cn('absolute inset-0 overflow-hidden', toneFor(i).panel)}>
+            <Panel
+              index={i}
+              title={study.title}
+              summary={study.summary}
+              tech={study.tech}
+              showProgress
+            />
           </article>
         ))}
       </div>
