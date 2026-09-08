@@ -59,7 +59,9 @@ export function ScrollStage({ locked, children }: ScrollStageProps) {
       /* No Lenis under reduced motion, and no animation wanted there either. */
       if (lenis) lenis.scrollTo(section, { duration: 1.4 });
       else section.scrollIntoView();
-      history.replaceState(null, '', anchor.hash);
+
+      /* Deliberately not stamping the hash into the URL: boot forces the page back to the top, so a
+         shared `#work` link would not land there. The ids stay for the anchors themselves. */
     };
 
     document.addEventListener('click', onClick);
