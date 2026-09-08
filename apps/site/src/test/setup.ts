@@ -15,6 +15,10 @@ if (!window.matchMedia) {
   });
 }
 
+// jsdom defines scrollTo but has no layout behind it, so every call logs "Not implemented". The
+// boot effect calls it once per render; overriding it outright keeps the run readable.
+window.scrollTo = () => {};
+
 if (!globalThis.ResizeObserver) {
   globalThis.ResizeObserver = class {
     observe() {}
