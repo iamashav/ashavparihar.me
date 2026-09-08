@@ -29,6 +29,13 @@ export function ScrollStage({ locked, children }: ScrollStageProps) {
     };
   }, [reducedMotion]);
 
+  /* The intro holds scroll at the top, so letting the browser restore a previous position lands it
+     somewhere the layers have not been measured for. Own the starting position instead. */
+  useEffect(() => {
+    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+    window.scrollTo(0, 0);
+  }, []);
+
   useEffect(() => {
     document.documentElement.classList.toggle('is-scroll-blocked', locked);
 
@@ -37,6 +44,10 @@ export function ScrollStage({ locked, children }: ScrollStageProps) {
       if (locked) lenis.stop();
       else lenis.start();
     }
+
+    /* Triggers measured while the body could not scroll are stale once it can. Without this the
+       sticky layers sit against out-of-date bounds until something else forces a recalculation. */
+    if (!locked) ScrollTrigger.refresh();
 
     return () => document.documentElement.classList.remove('is-scroll-blocked');
   }, [locked]);

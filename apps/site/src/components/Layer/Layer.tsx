@@ -15,7 +15,10 @@ interface LayerProps {
    layer rides up over it. */
 export function Layer({ id, runway, depth, tone, sectionRef, children }: LayerProps) {
   return (
-    <section ref={sectionRef} id={id} className={cn('relative', runway, depth)}>
+    /* The tone sits on the section as well as the sticky child: the child is sized in svh and the
+       runway in vh, and while those settle during load a mismatch would expose the body's ink
+       background as a strip. Painting the section means any sliver is the layer's own colour. */
+    <section ref={sectionRef} id={id} className={cn('relative', runway, depth, tone)}>
       <div className={cn('sticky top-0 h-svh overflow-hidden', tone)}>{children}</div>
     </section>
   );
