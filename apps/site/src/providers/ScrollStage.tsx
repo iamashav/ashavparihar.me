@@ -37,8 +37,8 @@ export function ScrollStage({ locked, children }: ScrollStageProps) {
   }, []);
 
   /* Lenis owns the scroll position, so a native anchor jump gets pulled straight back — which is
-     why an in-page link needed two clicks to take. Handle them here and land immediately rather
-     than gliding: a nav link should arrive, not travel. */
+     why an in-page link needed two clicks to take, and why it arrived as a hard cut. Routing the
+     click through Lenis lets it animate the travel instead. */
   useEffect(() => {
     const onClick = (event: MouseEvent) => {
       if (event.defaultPrevented || event.button !== 0) return;
@@ -56,7 +56,8 @@ export function ScrollStage({ locked, children }: ScrollStageProps) {
 
       event.preventDefault();
       const lenis = lenisRef.current;
-      if (lenis) lenis.scrollTo(section, { immediate: true });
+      /* No Lenis under reduced motion, and no animation wanted there either. */
+      if (lenis) lenis.scrollTo(section, { duration: 1.4 });
       else section.scrollIntoView();
       history.replaceState(null, '', anchor.hash);
     };
