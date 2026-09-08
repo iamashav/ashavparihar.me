@@ -1,7 +1,8 @@
 import { useCallback, useState } from 'react';
+import { ContactLayer } from './components/ContactLayer/ContactLayer';
 import { HeroLayer } from './components/HeroLayer/HeroLayer';
 import { Intro } from './components/Intro/Intro';
-import { SiteHeader } from './components/SiteHeader/SiteHeader';
+import { ProjectReel } from './components/ProjectReel/ProjectReel';
 import { WorkLayer } from './components/WorkLayer/WorkLayer';
 import { ScrollStage } from './providers/ScrollStage';
 import { usePrefersReducedMotion } from './hooks/usePrefersReducedMotion';
@@ -15,10 +16,11 @@ function App() {
   return (
     <ScrollStage locked={!ready}>
       {!reducedMotion && !booted && <Intro onDone={handleIntroDone} />}
-      <SiteHeader />
       <main>
         <HeroLayer ready={ready} />
         <WorkLayer />
+        <ProjectReel />
+        <ContactLayer />
       </main>
     </ScrollStage>
   );

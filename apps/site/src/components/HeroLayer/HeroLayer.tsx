@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import { gsap, SplitText } from '../../lib/gsap';
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
 import { Layer } from '../Layer/Layer';
+import { SiteHeader } from '../SiteHeader/SiteHeader';
 
 interface HeroLayerProps {
   ready: boolean;
@@ -11,17 +12,21 @@ export function HeroLayer({ ready }: HeroLayerProps) {
   const reducedMotion = usePrefersReducedMotion();
   const nameRef = useRef<HTMLHeadingElement>(null);
   const asideRef = useRef<HTMLDivElement>(null);
+  const timelineRef = useRef<gsap.core.Timeline | null>(null);
 
+  /* Built paused at mount, not when the intro clears. `from` applies its start values as soon as
+     the tween exists, so the name is hidden from the first painted frame — otherwise the intro
+     slides away revealing finished text, which then snaps back to hidden and replays. */
   useEffect(() => {
     const name = nameRef.current;
     const aside = asideRef.current;
-    if (!ready || reducedMotion || !name || !aside) return;
+    if (reducedMotion || !name || !aside) return;
 
     const context = gsap.context(() => {
       const split = new SplitText(name, { type: 'chars', mask: 'chars' });
 
-      gsap
-        .timeline()
+      timelineRef.current = gsap
+        .timeline({ paused: true })
         .from(split.chars, {
           yPercent: 115,
           duration: 1.1,
@@ -31,19 +36,37 @@ export function HeroLayer({ ready }: HeroLayerProps) {
         .from(aside.children, { opacity: 0, duration: 0.6, stagger: 0.08 }, '-=0.5');
     });
 
-    return () => context.revert();
-  }, [ready, reducedMotion]);
+    return () => {
+      timelineRef.current = null;
+      context.revert();
+    };
+  }, [reducedMotion]);
+
+  useEffect(() => {
+    const timeline = timelineRef.current;
+    if (!ready || !timeline) return;
+
+    timeline.play();
+
+    /* The content is hidden until this plays, so a stalled ticker would leave the hero blank.
+       Timed from playback rather than mount, or it would cut the reveal short. */
+    const failsafe = window.setTimeout(() => {
+      if (timeline.progress() < 1) timeline.progress(1);
+    }, 2500);
+
+    return () => window.clearTimeout(failsafe);
+  }, [ready]);
 
   return (
-    <Layer id="top" runway="h-[190vh]" depth="z-40" tone="bg-flood text-ink">
-      <div className="flex h-full flex-col stage-pad pt-24 pb-[var(--stage-gutter)]">
-        <span className="label">Frontend / Interfaces & the systems under them</span>
+    <Layer id="top" runway="h-[115vh]" depth="z-40" tone="bg-flood text-ink">
+      <div className="flex h-full flex-col stage-pad pb-[var(--stage-gutter)]">
+        <SiteHeader />
 
-        {/* Anton is condensed enough that a viewport-relative size has to run large before the
-            name spans the column; anything smaller leaves the layer reading as empty. */}
+        <span className="label mt-10">Frontend / Interfaces & the systems under them</span>
+
         <h1
           ref={nameRef}
-          className="mt-5 text-[clamp(3.5rem,21vw,23rem)] leading-[0.78] tracking-[-0.01em]"
+          className="mt-5 text-[clamp(3.5rem,18.5vw,20rem)] tracking-[-0.01em]"
         >
           Ashav
           <br />
