@@ -62,14 +62,12 @@ export function HeroLayer({ ready }: HeroLayerProps) {
       <div className="flex h-full flex-col stage-pad pb-[var(--stage-gutter)]">
         <SiteHeader />
 
-        <span className="label mt-10">Frontend / Interfaces & the systems under them</span>
-
         {/* The line break leaves no space in textContent, so the name would be announced as one
             run-on word; the label also survives SplitText rewriting the markup underneath. */}
         <h1
           ref={nameRef}
           aria-label="Ashav Parihar"
-          className="mt-5 text-[clamp(3.5rem,18.5vw,20rem)] tracking-[-0.01em]"
+          className="mt-12 text-[clamp(3.5rem,18.5vw,20rem)] tracking-[-0.01em]"
         >
           Ashav
           <br />
@@ -81,8 +79,8 @@ export function HeroLayer({ ready }: HeroLayerProps) {
           className="mt-auto flex flex-col gap-8 border-t border-ink pt-6 md:flex-row md:items-end md:justify-between"
         >
           <p className="max-w-[38ch] text-[1.125rem] leading-[1.45]">
-            I build production React and TypeScript interfaces, the services behind them, and
-            the AI tooling that now does the mechanical half of the work.
+            I build production React and TypeScript interfaces, the services behind them, and the
+            AI tooling that increasingly handles the repetitive work.
           </p>
           <div className="flex gap-3">
             <a
