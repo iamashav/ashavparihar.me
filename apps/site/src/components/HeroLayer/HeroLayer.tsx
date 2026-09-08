@@ -34,7 +34,7 @@ export function HeroLayer({ onBuilt }: HeroLayerProps) {
     const nav = root.querySelector('[data-nav]');
     const rules = root.querySelectorAll('[data-rule]');
     const grid = root.querySelector('[data-grid]');
-    const cube = root.querySelector('[data-cube]');
+    const object = root.querySelector('[data-object]');
     if (!(mark instanceof HTMLElement) || !(nav instanceof HTMLElement)) {
       onBuilt();
       return;
@@ -47,7 +47,12 @@ export function HeroLayer({ onBuilt }: HeroLayerProps) {
       onBuilt();
     };
 
-    const context = gsap.context(() => {
+    let context: gsap.Context | null = null;
+    let timeline: gsap.core.Timeline | null = null;
+    let failsafe = 0;
+
+    const build = () => {
+      context = gsap.context(() => {
       /* The mark flies from centre stage to its masthead slot, so the opening and the resting
          position are the same element — measured here rather than guessed, because both depend on
          the viewport. */
@@ -74,14 +79,14 @@ export function HeroLayer({ onBuilt }: HeroLayerProps) {
       gsap.set(rules, { scaleX: 0, transformOrigin: 'left center' });
       /* The field was the one thing already on screen while everything else built itself. */
       gsap.set(grid, { '--grid-reveal': 0 });
-      gsap.set(cube, { opacity: 0, scale: 0.6 });
+      gsap.set(object, { opacity: 0, scale: 0.6 });
 
       const split = new SplitText(name, { type: 'chars', mask: 'chars' });
       gsap.set(split.chars, { yPercent: 115 });
       gsap.set(aside.children, { opacity: 0 });
 
-      gsap
-        .timeline({ onComplete: finish })
+      timeline = gsap
+        .timeline({ paused: true, onComplete: finish })
         /* The mark writes itself at full size — A first, then P. */
         .to(strokes, {
           strokeDashoffset: 0,
@@ -105,17 +110,54 @@ export function HeroLayer({ onBuilt }: HeroLayerProps) {
           '-=0.55',
         )
         /* Only once there is a field for it to sit on. */
-        .to(cube, { opacity: 1, scale: 1, duration: 0.9, ease: 'expo.out' }, '-=0.5')
+        .to(object, { opacity: 1, scale: 1, duration: 0.9, ease: 'expo.out' }, '-=0.5')
         .to(aside.children, { opacity: 1, duration: 0.6, stagger: 0.08 }, '-=0.4');
-    }, root);
+      }, root);
 
-    /* Everything above starts hidden, so a stalled ticker would leave an empty hero and scroll
-       locked. Release regardless. */
-    const failsafe = window.setTimeout(finish, 5000);
+    };
+
+    let dropped = false;
+    let started = false;
+
+    /* The opening state is written now, whether or not anyone is looking, so a tab opened in the
+       background is already holding the first frame of the sequence rather than the last. Only the
+       clock waits. */
+    build();
+
+    const play = () => {
+      if (dropped || !timeline) return;
+      timeline.play();
+      if (started) return;
+      started = true;
+      /* Everything starts hidden, so a stalled ticker would leave an empty hero and scroll locked.
+         Release regardless — but only once the sequence is actually running, or a tab left in the
+         background would unlock itself unseen. */
+      failsafe = window.setTimeout(finish, 5000);
+    };
+
+    /* A hidden tab gets no animation frames, and lag smoothing is off so GSAP's clock stays in step
+       with Lenis. Between them, a sequence left running in the background is handed one enormous
+       delta the moment it returns and skips straight to its end — open the site in a background tab
+       and the whole thing is over before it is ever seen. So it holds until it is looked at, and
+       holds again if it is looked away from mid-flight. */
+    const onVisibility = () => {
+      if (document.visibilityState !== 'visible') {
+        timeline?.pause();
+        return;
+      }
+      /* The first frame after a tab returns still carries the whole time it spent away. Waiting two
+         frames lets that one oversized tick pass before the clock is let go. */
+      requestAnimationFrame(() => requestAnimationFrame(play));
+    };
+
+    if (document.visibilityState === 'visible') play();
+    document.addEventListener('visibilitychange', onVisibility);
 
     return () => {
+      dropped = true;
+      document.removeEventListener('visibilitychange', onVisibility);
       window.clearTimeout(failsafe);
-      context.revert();
+      context?.revert();
     };
   }, [reducedMotion, onBuilt]);
 
