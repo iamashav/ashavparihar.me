@@ -1,34 +1,26 @@
-import { useState } from 'react';
-import { CaseStudies } from './components/CaseStudies/CaseStudies';
-import { Header } from './components/Header/Header';
-import { HeroSection } from './components/HeroSection/HeroSection';
-import { Preloader } from './components/Preloader/Preloader';
-import { ProjectDirectory } from './components/ProjectDirectory/ProjectDirectory';
-import { RetroCursor } from './components/RetroCursor/RetroCursor';
-import { ScreenOverlay } from './components/ScreenOverlay/ScreenOverlay';
-import { SystemCapabilities } from './components/SystemCapabilities/SystemCapabilities';
-import { SystemTerminalFooter } from './components/SystemTerminalFooter/SystemTerminalFooter';
-import { SmoothScrollProvider } from './providers/SmoothScrollProvider';
+import { useCallback, useState } from 'react';
+import { HeroLayer } from './components/HeroLayer/HeroLayer';
+import { Intro } from './components/Intro/Intro';
+import { SiteHeader } from './components/SiteHeader/SiteHeader';
+import { WorkLayer } from './components/WorkLayer/WorkLayer';
+import { ScrollStage } from './providers/ScrollStage';
 import { usePrefersReducedMotion } from './hooks/usePrefersReducedMotion';
 
 function App() {
   const reducedMotion = usePrefersReducedMotion();
   const [booted, setBooted] = useState(false);
+  const ready = booted || reducedMotion;
+  const handleIntroDone = useCallback(() => setBooted(true), []);
 
   return (
-    <SmoothScrollProvider>
-      {!reducedMotion && !booted && <Preloader onComplete={() => setBooted(true)} />}
-      <ScreenOverlay />
-      <RetroCursor />
-      <Header />
+    <ScrollStage locked={!ready}>
+      {!reducedMotion && !booted && <Intro onDone={handleIntroDone} />}
+      <SiteHeader />
       <main>
-        <HeroSection />
-        <CaseStudies />
-        <ProjectDirectory />
-        <SystemCapabilities />
+        <HeroLayer ready={ready} />
+        <WorkLayer />
       </main>
-      <SystemTerminalFooter />
-    </SmoothScrollProvider>
+    </ScrollStage>
   );
 }
 
