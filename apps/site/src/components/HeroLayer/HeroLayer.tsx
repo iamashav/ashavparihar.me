@@ -1,6 +1,7 @@
 import { useLayoutEffect, useRef } from 'react';
 import { gsap, SplitText } from '../../lib/gsap';
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
+import { HeroField } from '../HeroField/HeroField';
 import { Layer } from '../Layer/Layer';
 import { SiteHeader } from '../SiteHeader/SiteHeader';
 
@@ -32,6 +33,8 @@ export function HeroLayer({ onBuilt }: HeroLayerProps) {
     const mark = root.querySelector('[data-mark]');
     const nav = root.querySelector('[data-nav]');
     const rules = root.querySelectorAll('[data-rule]');
+    const grid = root.querySelector('[data-grid]');
+    const cube = root.querySelector('[data-cube]');
     if (!(mark instanceof HTMLElement) || !(nav instanceof HTMLElement)) {
       onBuilt();
       return;
@@ -69,6 +72,9 @@ export function HeroLayer({ onBuilt }: HeroLayerProps) {
       gsap.set(mark, { x: dx, y: dy, scale, transformOrigin: 'center center' });
       gsap.set(nav, { opacity: 0 });
       gsap.set(rules, { scaleX: 0, transformOrigin: 'left center' });
+      /* The field was the one thing already on screen while everything else built itself. */
+      gsap.set(grid, { '--grid-reveal': 0 });
+      gsap.set(cube, { opacity: 0, scale: 0.6 });
 
       const split = new SplitText(name, { type: 'chars', mask: 'chars' });
       gsap.set(split.chars, { yPercent: 115 });
@@ -89,13 +95,18 @@ export function HeroLayer({ onBuilt }: HeroLayerProps) {
            makes it read as the mark laying the layout down as it travels. */
         .to(rules, { scaleX: 1, duration: 1.1, ease: 'expo.out', stagger: 0.12 }, '<0.25')
         .to(nav, { opacity: 1, duration: 0.5, ease: 'power2.out' }, '<0.45')
+        /* The grid opens outward from its centre — the mask radius growing from nothing, so it
+           reads as being drawn rather than faded up. */
+        .to(grid, { '--grid-reveal': 1, duration: 1.2, ease: 'power2.out' }, '<0.15')
         /* The name rises out of the baseline rule the mark just drew. */
         .to(
           split.chars,
           { yPercent: 0, duration: 1.1, ease: 'expo.out', stagger: 0.028 },
           '-=0.55',
         )
-        .to(aside.children, { opacity: 1, duration: 0.6, stagger: 0.08 }, '-=0.45');
+        /* Only once there is a field for it to sit on. */
+        .to(cube, { opacity: 1, scale: 1, duration: 0.9, ease: 'expo.out' }, '-=0.5')
+        .to(aside.children, { opacity: 1, duration: 0.6, stagger: 0.08 }, '-=0.4');
     }, root);
 
     /* Everything above starts hidden, so a stalled ticker would leave an empty hero and scroll
@@ -114,17 +125,25 @@ export function HeroLayer({ onBuilt }: HeroLayerProps) {
         <SiteHeader />
         <span data-rule className="block h-px w-full bg-ink" />
 
-        {/* The line break leaves no space in textContent, so the name would be announced as one
-            run-on word; the label also survives SplitText rewriting the markup underneath. */}
-        <h1
-          ref={nameRef}
-          aria-label="Ashav Parihar"
-          className="mt-10 text-[clamp(3.5rem,18.5vw,20rem)] tracking-[-0.01em]"
-        >
-          Ashav
-          <br />
-          Parihar
-        </h1>
+        <div className="mt-10 flex flex-1 items-center gap-6">
+          {/* The line break leaves no space in textContent, so the name would be announced as one
+              run-on word; the label also survives SplitText rewriting the markup underneath. */}
+          <h1
+            ref={nameRef}
+            aria-label="Ashav Parihar"
+            className="shrink-0 text-[clamp(3rem,16.5vw,18rem)] tracking-[-0.01em]"
+          >
+            Ashav
+            <br />
+            Parihar
+          </h1>
+
+          {/* Only where the void exists. On a phone the name stacks to full width and there is no
+              empty column to fill, so the field would be adding height rather than using space. */}
+          <div className="hidden flex-1 self-stretch md:block">
+            <HeroField />
+          </div>
+        </div>
 
         <div className="mt-auto">
           <span data-rule className="block h-px w-full bg-ink" />
