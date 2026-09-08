@@ -190,7 +190,7 @@ export function ContactLayer() {
     >
       <div className="flex h-full flex-col stage-pad pt-24 pb-[var(--stage-gutter)]">
         <div className="flex items-baseline justify-between">
-          <h2 className="label">Contact</h2>
+          <h2 className="section-label">Contact</h2>
           <div className="flex gap-6">
             {LINKS.map((link) => (
               <a key={link.href} href={link.href} {...EXTERNAL} className="label hover:line-through">
@@ -242,11 +242,11 @@ export function ContactLayer() {
               )}
             </svg>
           </a>
-          <span className="label text-ink/60">Scan, or click to email</span>
+          <span className="section-label text-ink/70">Scan, or click to email</span>
         </div>
 
         <div className="relative flex items-end">
-          <span className="label text-ink/50">© 2026</span>
+          <span className="section-label text-ink/70">© 2026</span>
           <Logo className="absolute inset-x-0 mx-auto h-6 w-6" />
         </div>
       </div>

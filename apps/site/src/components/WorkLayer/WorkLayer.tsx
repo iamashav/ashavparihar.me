@@ -31,7 +31,7 @@ function Panel({ index, title, summary, tech, showProgress }: {
       className="flex h-full flex-col stage-pad pt-28 pb-[var(--stage-gutter)]"
     >
       <div className="flex items-center justify-between pb-5">
-        <span className="label">Selected work</span>
+        <span className="section-label">Selected work</span>
       </div>
 
       {/* The header rule doubles as the progress track, so the fill sweeps the full viewport width

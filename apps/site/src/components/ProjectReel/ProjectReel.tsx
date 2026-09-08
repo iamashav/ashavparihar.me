@@ -97,7 +97,7 @@ export function ProjectReel() {
   if (reducedMotion) {
     return (
       <section id="projects" className="relative z-60 bg-ink stage-pad py-28 text-bone">
-        <h2 className="label">Projects</h2>
+        <h2 className="section-label">Projects</h2>
         <div className="mt-16 grid gap-20 md:grid-cols-2">
           {projects.map((project, i) => (
             <ProjectCard key={project.id} project={project} index={i} />
@@ -117,7 +117,7 @@ export function ProjectReel() {
     >
       <div className="flex h-full flex-col pt-24">
         <div className="stage-pad">
-          <h2 className="label">Projects</h2>
+          <h2 className="section-label">Projects</h2>
         </div>
 
         {/* In flow under the header rather than absolutely placed, so the two cannot overlap. */}
