@@ -17,7 +17,7 @@ export function SiteHeader() {
       </a>
       <nav className="flex gap-8">
         {NAV.map((item) => (
-          <a key={item.href} href={item.href} className="label hover:line-through">
+          <a key={item.href} href={item.href} className="label link-wipe">
             {item.label}
           </a>
         ))}

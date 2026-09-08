@@ -193,7 +193,7 @@ export function ContactLayer() {
           <h2 className="section-label">Contact</h2>
           <div className="flex gap-6">
             {LINKS.map((link) => (
-              <a key={link.href} href={link.href} {...EXTERNAL} className="label hover:line-through">
+              <a key={link.href} href={link.href} {...EXTERNAL} className="label link-wipe">
                 {link.label} ↗
               </a>
             ))}
@@ -242,11 +242,11 @@ export function ContactLayer() {
               )}
             </svg>
           </a>
-          <span className="section-label text-ink/70">Scan, or click to email</span>
+          <span className="note text-ink/70">Scan, or click to email</span>
         </div>
 
         <div className="relative flex items-end">
-          <span className="section-label text-ink/70">© 2026</span>
+          <span className="note text-ink/70">© 2026</span>
           {/* w-fit so the hit area is the mark itself rather than the whole footer strip. */}
           <a href="#top" aria-label="Back to top" className="absolute inset-x-0 mx-auto w-fit">
             <Logo className="h-6 w-6" />

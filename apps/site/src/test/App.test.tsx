@@ -29,17 +29,18 @@ describe('App shell', () => {
 
     expect(screen.getByRole('heading', { level: 1, name: /ashav parihar/i })).toBeInTheDocument();
 
+    // Sections are h2, the items within them h3 — one level per rank, not two names sharing one.
+    expect(screen.getByRole('heading', { level: 2, name: 'Selected work' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 2, name: 'Projects' })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 2, name: 'Contact' })).toBeInTheDocument();
+
     caseStudies.forEach((study) => {
-      expect(screen.getByRole('heading', { level: 2, name: study.title })).toBeInTheDocument();
+      expect(screen.getByRole('heading', { level: 3, name: study.title })).toBeInTheDocument();
     });
 
     projects.forEach((project) => {
       expect(screen.getByRole('heading', { level: 3, name: project.title })).toBeInTheDocument();
     });
-
-    // Every layer needs a heading, or it is invisible to heading-based navigation.
-    expect(screen.getByRole('heading', { level: 2, name: 'Projects' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { level: 2, name: 'Contact' })).toBeInTheDocument();
   });
 
   it('opens every external link safely in a new tab', () => {

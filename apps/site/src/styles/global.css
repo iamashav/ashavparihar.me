@@ -77,6 +77,48 @@
    stop grouping into words, which is what made them hard to read rather than the size alone. */
 @utility section-label {
   font-family: var(--font-mono);
+  font-size: 0.9375rem;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* One hover for every text link. currentColor so it reads on the green grounds and the ink ones
+   alike, and the origin flips between states so it wipes in from the left and out to the right
+   rather than retracting back the way it came. */
+@utility link-wipe {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: -0.4em;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right center;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  &:hover::after,
+  &:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &::after {
+      transition-duration: 0s;
+    }
+  }
+}
+
+/* Footnotes sit a step below a section heading. Separating them by size rather than only by
+   opacity is what gives the closing layer an actual hierarchy. */
+@utility note {
+  font-family: var(--font-mono);
   font-size: 0.8125rem;
   font-weight: 400;
   line-height: 1;

@@ -42,10 +42,10 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       <h3 className="mt-3 text-[clamp(1.5rem,2.4vw,2.25rem)]">{project.title}</h3>
 
       <div className="mt-4 flex gap-5">
-        <a href={project.live} {...EXTERNAL} className="label hover:text-flood">
+        <a href={project.live} {...EXTERNAL} className="label link-wipe hover:text-flood">
           Live ↗
         </a>
-        <a href={project.github} {...EXTERNAL} className="label hover:text-flood">
+        <a href={project.github} {...EXTERNAL} className="label link-wipe hover:text-flood">
           Code ↗
         </a>
       </div>

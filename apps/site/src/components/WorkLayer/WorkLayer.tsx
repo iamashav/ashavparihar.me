@@ -31,7 +31,12 @@ function Panel({ index, title, summary, tech, showProgress }: {
       className="flex h-full flex-col stage-pad pt-28 pb-[var(--stage-gutter)]"
     >
       <div className="flex items-center justify-between pb-5">
-        <span className="section-label">Selected work</span>
+        {/* Decorative: every panel repeats this so it can flip colour with the ground, and three
+            identical headings would be worse for assistive tech than none. The section's real
+            heading is rendered once, below. */}
+        <span aria-hidden className="section-label">
+          Selected work
+        </span>
       </div>
 
       {/* The header rule doubles as the progress track, so the fill sweeps the full viewport width
@@ -48,9 +53,9 @@ function Panel({ index, title, summary, tech, showProgress }: {
 
       <div className={cn('flex-1 content-center', PANEL_GRID)}>
         <div>
-          <h2 data-panel-title className="text-[clamp(2rem,4.8vw,4.5rem)]">
+          <h3 data-panel-title className="text-[clamp(2rem,4.8vw,4.5rem)]">
             {title}
-          </h2>
+          </h3>
         </div>
         <div className="md:pt-3">
           <p className="max-w-[44ch] text-[clamp(1.125rem,1.55vw,1.5rem)] leading-[1.4]">
@@ -150,6 +155,7 @@ export function WorkLayer() {
   if (reducedMotion) {
     return (
       <section id="work" className="relative z-50">
+        <h2 className="sr-only">Selected work</h2>
         {caseStudies.map((study, i) => (
           <article key={study.id} className={cn('min-h-svh', toneFor(i).panel)}>
             <Panel
@@ -173,6 +179,7 @@ export function WorkLayer() {
       tone="bg-ink"
       sectionRef={sectionRef}
     >
+      <h2 className="sr-only">Selected work</h2>
       <div ref={panelsRef} className="relative h-full">
         {caseStudies.map((study, i) => (
           <article key={study.id} className={cn('absolute inset-0 overflow-hidden', toneFor(i).panel)}>
