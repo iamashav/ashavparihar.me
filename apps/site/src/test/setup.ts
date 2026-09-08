@@ -1,6 +1,7 @@
 import '@testing-library/jest-dom/vitest';
 
-// jsdom ships none of these, and all three are read on first render (media-query hooks, Lenis, whileInView).
+// jsdom ships none of these, and each is read on first render: matchMedia by the reduced-motion
+// hook, ResizeObserver by ScrollTrigger, IntersectionObserver by Lenis.
 if (!window.matchMedia) {
   window.matchMedia = (query: string) => ({
     media: query,
@@ -36,7 +37,3 @@ if (!globalThis.IntersectionObserver) {
     }
   };
 }
-
-// jsdom cannot back a canvas and logs "Not implemented" for every getContext call; returning null
-// is exactly the signal the canvas components already guard against.
-HTMLCanvasElement.prototype.getContext = () => null;
