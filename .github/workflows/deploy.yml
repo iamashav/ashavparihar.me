@@ -1,0 +1,58 @@
+name: Build and deploy
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+# The checks read the repo; only the deploy job needs more, and it asks for it itself.
+permissions:
+  contents: read
+
+# One deployment at a time, and never cancel one midway — a half-published site is worse
+# than a late one.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run lint --workspace=site
+
+      - run: npm run test --workspace=site
+
+      # Runs tsc -b before vite build, so a type error fails here rather than shipping.
+      - run: npm run build --workspace=site
+
+      # Only worth keeping when there is a deploy waiting to consume it.
+      - name: Upload the built site
+        if: github.event_name == 'push'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  deploy:
+    # Nothing reaches the live site unless the checks above passed.
+    needs: check
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
