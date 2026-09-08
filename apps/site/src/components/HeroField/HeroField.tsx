@@ -4,15 +4,19 @@ import { gsap } from '../../lib/gsap';
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
 
 /* Smaller first: the opening model is fetched before anything shows and the second streams in behind
-   it while the first is on screen, so nothing waits on the pair. */
-const MODELS = ['/models/spaceship.glb', '/models/stone-tower.glb'];
+   it while the first is on screen, so nothing waits on the pair.
+
+   The fit is per-model because a single figure cannot serve both. It caps how much of the frame the
+   model may fill, but only along whichever axis binds first — which is width for both of these. The
+   spaceship is a flat saucer and uses 9% of the frame's height at that width; the tower is close to
+   cubic and uses 27%, so at an equal setting it reads three times the object. The number is what
+   evens out how large they appear, not how large they measure. */
+const MODELS = [
+  { url: '/models/spaceship.glb', fit: 0.92 },
+  { url: '/models/stone-tower.glb', fit: 0.75 },
+];
 
 const HOLD_SECONDS = 12;
-
-/* The model is scaled to this height, with a width clamp for the one case where that would make it
-   overrun the column. */
-const TARGET_HEIGHT = 1;
-const MAX_WIDTH = 1.35;
 
 /* Seconds per full turn. Driven from elapsed time rather than incremented per frame, so the object
    turns at the same rate on a 60Hz panel as on a 144Hz one. */
@@ -148,12 +152,40 @@ export function HeroField() {
         geometry.setAttribute('position', new BufferAttribute(widened, 3));
       };
 
+      /* Declared up here because the fit reads it and the first resize runs before anything has
+         loaded. */
+      let current: Group | null = null;
+
+      /* Scaled to whichever of the two axes runs out first, measured against what the camera can
+         actually see at this aspect rather than fixed in world units — a world-space clamp knows
+         nothing about the canvas aspect, so a value that sits comfortably in a wide desktop column
+         fills the frame edge to edge in a narrow portrait one. The horizontal extent is the diagonal
+         of the footprint rather than the width, because the object turns: at 45° it presents both x
+         and z at once, and fitting only the width would let it swing past the edges mid-rotation. */
+      const fit = () => {
+        if (!current) return;
+        const { footprint, height, margin } = current.userData as {
+          footprint: number;
+          height: number;
+          margin: number;
+        };
+        const visibleHeight = 2 * Math.tan((camera.fov * Math.PI) / 360) * camera.position.z;
+        const visibleWidth = visibleHeight * camera.aspect;
+        current.scale.setScalar(
+          Math.min((visibleWidth * margin) / footprint, (visibleHeight * margin) / height),
+        );
+      };
+
       const resize = () => {
         const { clientWidth: w, clientHeight: h } = mount;
         if (!w || !h) return;
-        renderer.setSize(w, h, false);
+        /* Letting three set the canvas's CSS size too. Suppressing it leaves the element sized by
+           its drawing buffer, which is the box multiplied by the pixel ratio — invisible at dpr 1
+           and a canvas two or three times too large, overflowing its box, on a phone. */
+        renderer.setSize(w, h);
         camera.aspect = w / h;
         camera.updateProjectionMatrix();
+        fit();
       };
       resize();
       const observer = new ResizeObserver(resize);
@@ -240,7 +272,6 @@ export function HeroField() {
       canvas.style.cursor = 'grab';
 
       const built = new Map<string, Group>();
-      let current: Group | null = null;
 
       const show = (key: string) => {
         const next = built.get(key);
@@ -248,6 +279,8 @@ export function HeroField() {
         if (current) pivot.remove(current);
         current = next;
         pivot.add(next);
+        /* Models differ in proportion, so the fit is per-model, not per-resize. */
+        fit();
         /* The canvas fades rather than the materials: the occlusion only holds while the fill is
            opaque and depth-sorted against the lines. */
         if (!reducedMotion) {
@@ -261,8 +294,8 @@ export function HeroField() {
 
       const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
 
-      const load = (url: string) =>
-        loader.loadAsync(url).then((gltf) => {
+      const load = (model: (typeof MODELS)[number]) =>
+        loader.loadAsync(model.url).then((gltf) => {
           if (cancelled) return;
 
           gltf.scene.updateWorldMatrix(true, true);
@@ -282,25 +315,26 @@ export function HeroField() {
           });
           const size = box.getSize(new Vector3());
           const centre = box.getCenter(new Vector3());
-          const scale = Math.min(
-            TARGET_HEIGHT / (size.y || 1),
-            MAX_WIDTH / Math.max(size.x, size.z, 0.0001),
-          );
-          /* Baked into the vertices rather than left on the group transform, so the pivot carries
-             nothing but rotation. */
-          const normalise = new Matrix4()
-            .makeScale(scale, scale, scale)
-            .multiply(new Matrix4().makeTranslation(-centre.x, -centre.y, -centre.z));
+          /* Only the centring is baked in. The scale stays on the holder because it depends on the
+             canvas aspect, which changes with the viewport — baked into the vertices it could not be
+             recomputed without rebuilding every geometry. */
+          const centreOnOrigin = new Matrix4().makeTranslation(-centre.x, -centre.y, -centre.z);
 
           const holder = new ThreeGroup();
           geometries.forEach((geometry) => {
-            geometry.applyMatrix4(normalise);
+            geometry.applyMatrix4(centreOnOrigin);
             holder.add(new Mesh(geometry, fill));
             holder.add(new LineSegments(new EdgesGeometry(geometry, CREASE_ANGLE), edges));
           });
+          holder.userData = {
+            /* The widest the footprint can ever present as it turns on Y. */
+            footprint: Math.hypot(size.x, size.z) || 1,
+            height: size.y || 1,
+            margin: model.fit,
+          };
 
-          built.set(url, holder);
-          if (!current) show(url);
+          built.set(model.url, holder);
+          if (!current) show(model.url);
         });
 
       load(MODELS[0])
@@ -314,7 +348,7 @@ export function HeroField() {
       const cycle = window.setInterval(() => {
         if (built.size < MODELS.length) return;
         index = (index + 1) % MODELS.length;
-        show(MODELS[index]);
+        show(MODELS[index].url);
       }, HOLD_SECONDS * 1000);
 
       teardown = () => {

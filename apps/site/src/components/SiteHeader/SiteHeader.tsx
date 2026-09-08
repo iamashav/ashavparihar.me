@@ -31,7 +31,9 @@ export function SiteHeader() {
       <a href="#top" data-mark aria-label="Ashav Parihar — home">
         <Logo className="h-7 w-7" />
       </a>
-      <nav data-nav className="flex items-center gap-8">
+      {/* A fixed gap does not shrink, so four items at 32px apart push the nav into the mark below
+          about 390px and overlap it outright at 320. */}
+      <nav data-nav className="flex items-center gap-5 md:gap-8">
         <button
           type="button"
           onClick={() => setMono((on) => !on)}

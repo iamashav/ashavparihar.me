@@ -28,7 +28,7 @@ function Panel({ index, title, summary, tech, showProgress }: {
   return (
     <div
       data-panel-content
-      className="flex h-full flex-col stage-pad pt-28 pb-[var(--stage-gutter)]"
+      className="flex h-full flex-col stage-pad pt-12 pb-[var(--stage-gutter)] md:pt-24"
     >
       <div className="flex items-center justify-between pb-5">
         {/* Decorative: every panel repeats this so it can flip colour with the ground, and three
@@ -174,7 +174,7 @@ export function WorkLayer() {
   return (
     <Layer
       id="work"
-      runway="h-[380vh]"
+      runway="h-[380svh]"
       depth="z-50"
       tone="bg-ink"
       sectionRef={sectionRef}

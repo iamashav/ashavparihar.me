@@ -183,12 +183,12 @@ export function ContactLayer() {
   return (
     <Layer
       id="contact"
-      runway="h-[110vh]"
+      runway="h-[110svh]"
       depth="z-70"
       tone="bg-flood text-ink"
       sectionRef={sectionRef}
     >
-      <div className="flex h-full flex-col stage-pad pt-24 pb-[var(--stage-gutter)]">
+      <div className="flex h-full flex-col stage-pad pt-12 pb-[var(--stage-gutter)] md:pt-24">
         <div className="flex items-baseline justify-between">
           <h2 className="section-label">Contact</h2>
           <div className="flex gap-6">

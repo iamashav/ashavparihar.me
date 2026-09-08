@@ -162,27 +162,28 @@ export function HeroLayer({ onBuilt }: HeroLayerProps) {
   }, [reducedMotion, onBuilt]);
 
   return (
-    <Layer id="top" runway="h-[115vh]" depth="z-40" tone="bg-flood text-ink">
+    <Layer id="top" runway="h-[115svh]" depth="z-40" tone="bg-flood text-ink">
       <div ref={rootRef} className="flex h-full flex-col stage-pad pb-[var(--stage-gutter)]">
         <SiteHeader />
         <span data-rule className="block h-px w-full bg-ink" />
 
-        <div className="mt-10 flex flex-1 items-center gap-6">
+        <div className="mt-10 flex flex-1 flex-col items-start gap-6 md:flex-row md:items-center">
           {/* The line break leaves no space in textContent, so the name would be announced as one
               run-on word; the label also survives SplitText rewriting the markup underneath. */}
           <h1
             ref={nameRef}
             aria-label="Ashav Parihar"
-            className="shrink-0 text-[clamp(3rem,16.5vw,18rem)] tracking-[-0.01em]"
+            className="shrink-0 text-[clamp(3.5rem,21vw,18rem)] tracking-[-0.01em] md:text-[clamp(3rem,16.5vw,18rem)]"
           >
             Ashav
             <br />
             Parihar
           </h1>
 
-          {/* Only where the void exists. On a phone the name stacks to full width and there is no
-              empty column to fill, so the field would be adding height rather than using space. */}
-          <div className="hidden flex-1 self-stretch md:block">
+          {/* Beside the name where there is a void to fill, beneath it on a phone where there is
+              not. It takes whatever the name leaves rather than a fixed share: at a fixed height the
+              column packed to the top and dropped all the slack between the field and the rule. */}
+          <div className="min-h-0 w-full flex-1 self-stretch md:w-auto">
             <HeroField />
           </div>
         </div>
@@ -197,16 +198,19 @@ export function HeroLayer({ onBuilt }: HeroLayerProps) {
               I build production React and TypeScript interfaces, the services behind them, and the
               AI tooling that increasingly handles the repetitive work.
             </p>
-            <div className="flex gap-3">
+            {/* The pair measures 318px at its natural size, which overruns a 320px phone and leaves
+                two on a 360px one. Splitting the row evenly and trimming the inset lets them shrink
+                to fit rather than press against the gutters. */}
+            <div className="flex w-full gap-3 md:w-auto">
               <a
                 href="#work"
-                className="label border border-ink bg-ink px-6 py-4 text-flood hover:bg-transparent hover:text-ink"
+                className="label flex-1 border border-ink bg-ink px-4 py-4 text-center text-flood hover:bg-transparent hover:text-ink md:flex-none md:px-6"
               >
                 See the work
               </a>
               <a
                 href="#contact"
-                className="label border border-ink px-6 py-4 hover:bg-ink hover:text-flood"
+                className="label flex-1 border border-ink px-4 py-4 text-center hover:bg-ink hover:text-flood md:flex-none md:px-6"
               >
                 Get in touch
               </a>
