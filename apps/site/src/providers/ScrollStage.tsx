@@ -29,13 +29,6 @@ export function ScrollStage({ locked, children }: ScrollStageProps) {
     };
   }, [reducedMotion]);
 
-  /* The intro holds scroll at the top, so letting the browser restore a previous position lands it
-     somewhere the layers have not been measured for. Own the starting position instead. */
-  useEffect(() => {
-    if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-    window.scrollTo(0, 0);
-  }, []);
-
   /* Lenis owns the scroll position, so a native anchor jump gets pulled straight back — which is
      why an in-page link needed two clicks to take, and why it arrived as a hard cut. Routing the
      click through Lenis lets it animate the travel instead. */
