@@ -77,6 +77,35 @@
   }
 }
 
+/* Graph paper that dissolves before it reaches an edge, so it reads as a field rather than as a
+   panel with a border. The mask is what stops it looking like a table. */
+@utility fade-grid {
+  background-image:
+    repeating-linear-gradient(
+      to right,
+      color-mix(in srgb, var(--color-ink) 18%, transparent) 0 1px,
+      transparent 1px 3.25rem
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-ink) 18%, transparent) 0 1px,
+      transparent 1px 3.25rem
+    );
+  /* The mask radius is a variable so the build can open it from nothing — at 0 both stops collapse
+     and the field is fully masked out. Defaults to 1 so reduced motion, which skips the build
+     entirely, still gets a drawn grid. */
+  -webkit-mask-image: radial-gradient(
+    ellipse at center,
+    black calc(var(--grid-reveal, 1) * 30%),
+    transparent calc(var(--grid-reveal, 1) * 72%)
+  );
+  mask-image: radial-gradient(
+    ellipse at center,
+    black calc(var(--grid-reveal, 1) * 30%),
+    transparent calc(var(--grid-reveal, 1) * 72%)
+  );
+}
+
 /* SVG transforms resolve against the viewBox by default, which would fling each module across the
    canvas instead of scaling it in place. */
 @utility qr-module {
