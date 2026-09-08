@@ -10,7 +10,7 @@ export const caseStudies: CaseStudy[] = [
     id: 'vue-to-react-migration',
     title: 'Consolidating a 200+ component frontend onto React',
     summary:
-      'The team already wanted off a split Vue and React stack. I started the migration and did most of the work — 200+ components plus the stores, styles and design layer underneath them — leaning on LLM tooling to get through it faster than a job that size usually goes.',
+      'Consolidated a split Vue and React frontend onto one stack — 200+ components plus the stores, styles and design layer beneath them. I started the migration and carried it through, using LLM tooling to move faster than a job this size usually allows and sequencing it so feature delivery never stopped.',
     tech: ['React', 'Vue', 'TypeScript', 'LLM tooling'],
   },
   {
