@@ -247,7 +247,10 @@ export function ContactLayer() {
 
         <div className="relative flex items-end">
           <span className="section-label text-ink/70">© 2026</span>
-          <Logo className="absolute inset-x-0 mx-auto h-6 w-6" />
+          {/* w-fit so the hit area is the mark itself rather than the whole footer strip. */}
+          <a href="#top" aria-label="Back to top" className="absolute inset-x-0 mx-auto w-fit">
+            <Logo className="h-6 w-6" />
+          </a>
         </div>
       </div>
     </Layer>
