@@ -28,9 +28,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
     <article className={cn('shrink-0', shape.width)}>
       <a href={project.live} {...EXTERNAL} className="block">
         <img
-          src={project.image.src768}
-          srcSet={`${project.image.src320} 320w, ${project.image.src768} 768w, ${project.image.src1280} 1280w`}
-          sizes="(max-width: 768px) 72vw, 38vw"
+          src={project.image.src}
           alt={project.image.alt}
           loading="lazy"
           className={cn('w-full object-cover object-top', shape.height)}
