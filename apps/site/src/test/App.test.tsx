@@ -1,5 +1,6 @@
-import { render, screen } from '@testing-library/react';
+import { cleanup, render, screen } from '@testing-library/react';
 import App from '../App';
+import { gsap, ScrollTrigger } from '../lib/gsap';
 import { caseStudies } from '../data/caseStudies';
 import { projects } from '../data/projects';
 
@@ -18,7 +19,14 @@ function setReducedMotion(matches: boolean) {
   });
 }
 
+/* Unmount first, so each layer's own gsap.context reverts, then clear what is global. The ticker,
+   the global timeline and ScrollTrigger's registry are module singletons shared by every test in the
+   file, so anything still running at the end of one test is still running during the next — and only
+   one test enables motion, which makes it the one that inherits the mess. */
 afterEach(() => {
+  cleanup();
+  ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+  gsap.globalTimeline.clear();
   window.matchMedia = originalMatchMedia;
 });
 
