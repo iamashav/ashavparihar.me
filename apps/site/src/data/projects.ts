@@ -1,7 +1,5 @@
 export interface ProjectImage {
-  src320: string;
-  src768: string;
-  src1280: string;
+  src: string;
   alt: string;
 }
 
@@ -28,15 +26,13 @@ export const projects: Project[] = [
     status: 'LIVE',
     title: 'Burger Builder',
     description:
-      'A build-your-own-burger app with a live order summary and checkout flow, backed by a Redux store.',
-    tech: ['React', 'Redux', 'Axios', 'Jest', 'Enzyme'],
+      'A build-your-own-burger app with live per-ingredient pricing and a sign-in gated order flow, with cart state held in Redux Toolkit.',
+    tech: ['React', 'Redux Toolkit', 'TypeScript', 'Tailwind', 'Vitest'],
     github: 'https://github.com/iamashav/Burger-Builder',
     live: 'https://my-react-burgerbuilder-app.web.app',
     image: {
-      src320: '/images/burger-builder-320.webp',
-      src768: '/images/burger-builder-768.webp',
-      src1280: '/images/burger-builder-1280.webp',
-      alt: 'Burger Builder app screenshot',
+      src: '/images/burger-builder.png',
+      alt: 'The MyBurger builder showing a stacked burger, the running price, and per-ingredient controls',
     },
   },
   {
@@ -51,9 +47,7 @@ export const projects: Project[] = [
     github: 'https://github.com/iamashav/shopping-cart',
     live: 'https://shoppingcartecommerce.netlify.app',
     image: {
-      src320: '/images/shopping-cart-320.webp',
-      src768: '/images/shopping-cart-768.webp',
-      src1280: '/images/shopping-cart-1280.webp',
+      src: '/images/shopping-cart.webp',
       alt: 'Shopping Cart app screenshot',
     },
   },
@@ -68,9 +62,7 @@ export const projects: Project[] = [
     github: 'https://github.com/iamashav/my-chat-app',
     live: 'https://chat-app-b2ffc.web.app',
     image: {
-      src320: '/images/my-chat-320.webp',
-      src768: '/images/my-chat-768.webp',
-      src1280: '/images/my-chat-1280.webp',
+      src: '/images/my-chat.webp',
       alt: 'My Chat app screenshot',
     },
   },
@@ -85,9 +77,7 @@ export const projects: Project[] = [
     github: 'https://github.com/iamashav/movie-watchlist',
     live: 'https://moviewatchlistapp.netlify.app',
     image: {
-      src320: '/images/movie-watchlist-320.webp',
-      src768: '/images/movie-watchlist-768.webp',
-      src1280: '/images/movie-watchlist-1280.webp',
+      src: '/images/movie-watchlist.webp',
       alt: 'Movie Watchlist app screenshot',
     },
   },
