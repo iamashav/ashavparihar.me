@@ -7,16 +7,33 @@ import { Layer } from '../Layer/Layer';
 
 const EXTERNAL = { target: '_blank', rel: 'noopener noreferrer' };
 
-/* Every card hangs from the SAME top edge — the stagger comes from the images having different
-   heights, which drops each caption to a different line. Varying the top margin instead reads as
-   noise. Portrait ratios and near-touching gaps are the rest of it. */
+/* Every card hangs from the SAME top edge, so each image's height drops its caption to a different
+   line. Varying the top margin instead reads as noise. */
 /* Heights are the binding constraint: header + tallest image + caption has to stay inside one
-   viewport, or the caption falls out through the layer's overflow. */
+   viewport, or the caption falls out through the layer's overflow. The image scales with the
+   viewport but the caption is fixed text, so each height is capped at what is left once 20rem is
+   reserved for the header and caption. The cap is scaled by the card's own size too — an unscaled
+   cap brings every card down to the same height on a short laptop and the sizes stop reading. */
 const SHAPES = [
-  { width: 'w-[74vw] md:w-[44svh]', height: 'h-[111vw] md:h-[66svh]' },
-  { width: 'w-[52vw] md:w-[30svh]', height: 'h-[78vw] md:h-[45svh]' },
-  { width: 'w-[70vw] md:w-[43svh]', height: 'h-[94vw] md:h-[57svh]' },
-  { width: 'w-[42vw] md:w-[22svh]', height: 'h-[62vw] md:h-[34svh]' },
+  {
+    width: 'w-[74vw] md:w-[44svh]',
+    height: 'h-[min(111vw,calc(100svh_-_20rem))] md:h-[min(66svh,calc(100svh_-_20rem))]',
+  },
+  {
+    width: 'w-[56vw] md:w-[33svh]',
+    height:
+      'h-[min(83vw,calc((100svh_-_20rem)*0.75))] md:h-[min(50svh,calc((100svh_-_20rem)*0.75))]',
+  },
+  {
+    width: 'w-[63vw] md:w-[37svh]',
+    height:
+      'h-[min(94vw,calc((100svh_-_20rem)*0.85))] md:h-[min(56svh,calc((100svh_-_20rem)*0.85))]',
+  },
+  {
+    width: 'w-[42vw] md:w-[22svh]',
+    height:
+      'h-[min(62vw,calc((100svh_-_20rem)*0.56))] md:h-[min(34svh,calc((100svh_-_20rem)*0.52))]',
+  },
 ];
 
 const shapeFor = (index: number) => SHAPES[index % SHAPES.length];
@@ -41,9 +58,11 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         />
       </a>
 
-      <span className="label mt-5 block text-bone/45">{project.tech.slice(0, 3).join(' · ')}</span>
+      <span className="label mt-5 block leading-[1.6] text-bone/45">{project.tech.slice(0, 3).join(' · ')}</span>
 
       <h3 className="mt-3 text-[clamp(1.5rem,2.4vw,2.25rem)]">{project.title}</h3>
+
+      <p className="mt-3 text-[0.9375rem] leading-[1.45] text-bone/70">{project.description}</p>
 
       <div className="mt-4 flex gap-5">
         <a href={project.live} {...EXTERNAL} className="label link-wipe hover:text-flood">

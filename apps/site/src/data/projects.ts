@@ -26,7 +26,7 @@ export const projects: Project[] = [
     status: 'LIVE',
     title: 'Bloom Coffee',
     description:
-      'A full-stack specialty coffee shop with Stripe Checkout, per-variant stock and an admin console for orders and refunds. The server re-prices every cart from Firestore before payment.',
+      'A full-stack specialty coffee shop with Stripe checkout and an admin console for stock and refunds.',
     tech: ['Next.js', 'Stripe', 'Firestore', 'TypeScript', 'Zustand', 'Playwright'],
     github: 'https://github.com/iamashav/bloom-coffee',
     live: 'https://bloomcoffee-shop.netlify.app',
@@ -42,7 +42,7 @@ export const projects: Project[] = [
     status: 'LIVE',
     title: 'Pearl & Leaf',
     description:
-      'A bubble tea builder with a live-drawn layered cup, undo and redo for every change, dietary filters, shareable drink links, favourites and checkout.',
+      'A bubble tea builder with layered drinks, undo and redo, dietary filters and shareable links.',
     tech: ['React', 'Redux Toolkit', 'Firebase', 'TypeScript', 'Tailwind', 'Vitest'],
     github: 'https://github.com/iamashav/pearl-and-leaf',
     live: 'https://pearl-and-leaf.web.app',
@@ -52,23 +52,8 @@ export const projects: Project[] = [
     },
   },
   {
-    id: 'my-chat',
-    index: '03',
-    role: 'Solo build',
-    status: 'LIVE',
-    title: 'My Chat',
-    description: 'A real-time chat app with Firebase-backed authentication and messaging.',
-    tech: ['React', 'Firebase'],
-    github: 'https://github.com/iamashav/my-chat-app',
-    live: 'https://chat-app-b2ffc.web.app',
-    image: {
-      src: '/images/my-chat.webp',
-      alt: 'My Chat app screenshot',
-    },
-  },
-  {
     id: 'movie-watchlist',
-    index: '04',
+    index: '03',
     role: 'Solo build',
     status: 'LIVE',
     title: 'Movie Watchlist',
@@ -79,6 +64,21 @@ export const projects: Project[] = [
     image: {
       src: '/images/movie-watchlist.webp',
       alt: 'Movie Watchlist app screenshot',
+    },
+  },
+  {
+    id: 'my-chat',
+    index: '04',
+    role: 'Solo build',
+    status: 'LIVE',
+    title: 'My Chat',
+    description: 'A real-time chat app with Firebase-backed authentication and messaging.',
+    tech: ['React', 'Firebase'],
+    github: 'https://github.com/iamashav/my-chat-app',
+    live: 'https://chat-app-b2ffc.web.app',
+    image: {
+      src: '/images/my-chat.webp',
+      alt: 'My Chat app screenshot',
     },
   },
 ];
