@@ -20,35 +20,35 @@ export interface Project {
 
 export const projects: Project[] = [
   {
-    id: 'burger-builder',
+    id: 'bloom-coffee',
     index: '01',
     role: 'Solo build',
     status: 'LIVE',
-    title: 'Burger Builder',
+    title: 'Bloom Coffee',
     description:
-      'A build-your-own-burger app with live per-ingredient pricing and a sign-in gated order flow, with cart state held in Redux Toolkit.',
-    tech: ['React', 'Redux Toolkit', 'TypeScript', 'Tailwind', 'Vitest'],
-    github: 'https://github.com/iamashav/Burger-Builder',
-    live: 'https://my-react-burgerbuilder-app.web.app',
+      'A full-stack specialty coffee shop with Stripe Checkout, per-variant stock and an admin console for orders and refunds. The server re-prices every cart from Firestore before payment.',
+    tech: ['Next.js', 'Stripe', 'Firestore', 'TypeScript', 'Zustand', 'Playwright'],
+    github: 'https://github.com/iamashav/bloom-coffee',
+    live: 'https://bloomcoffee-shop.netlify.app',
     image: {
-      src: '/images/burger-builder.png',
-      alt: 'The MyBurger builder showing a stacked burger, the running price, and per-ingredient controls',
+      src: '/images/bloom-coffee.png',
+      alt: 'The Bloom shop on a phone, with search, roast filters and a coffee bag product card',
     },
   },
   {
-    id: 'shopping-cart',
+    id: 'pearl-and-leaf',
     index: '02',
     role: 'Solo build',
     status: 'LIVE',
-    title: 'Shopping Cart',
+    title: 'Pearl & Leaf',
     description:
-      'An e-commerce storefront with Stripe checkout, built on Commerce.js for product and cart data.',
-    tech: ['React', 'Commerce.js', 'Stripe', 'Material-UI'],
-    github: 'https://github.com/iamashav/shopping-cart',
-    live: 'https://shoppingcartecommerce.netlify.app',
+      'A bubble tea builder with a live-drawn layered cup, undo and redo for every change, dietary filters, shareable drink links, favourites and checkout.',
+    tech: ['React', 'Redux Toolkit', 'Firebase', 'TypeScript', 'Tailwind', 'Vitest'],
+    github: 'https://github.com/iamashav/pearl-and-leaf',
+    live: 'https://pearl-and-leaf.web.app',
     image: {
-      src: '/images/shopping-cart.webp',
-      alt: 'Shopping Cart app screenshot',
+      src: '/images/pearl-and-leaf.png',
+      alt: 'The Pearl & Leaf builder on a phone, showing a layered taro milk tea with undo, redo and share controls',
     },
   },
   {

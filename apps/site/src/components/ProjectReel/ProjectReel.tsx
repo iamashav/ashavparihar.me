@@ -27,9 +27,9 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   return (
     <article className={cn('shrink-0', shape.width)}>
       <a href={project.live} {...EXTERNAL} className="block">
-        {/* A hairline, because a screenshot of a dark app has no edge of its own here: Burger Builder
-            is built on these same tokens, so its background is #070f0a exactly — the section colour,
-            at 1.00:1 contrast. Inset so it sits on the image rather than growing the card. */}
+        {/* A hairline, because a screenshot of a dark app has no edge of its own here — one built on
+            these same tokens has a background of exactly the section colour. Inset so it sits on the
+            image rather than growing the card. */}
         <img
           src={project.image.src}
           alt={project.image.alt}
