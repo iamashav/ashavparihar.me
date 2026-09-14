@@ -34,12 +34,17 @@ export function Logo({ className }: LogoProps) {
     const target = root.closest('a') ?? root;
 
     const redraw = () => {
-      /* Left alone while anything is already moving the mark: the hero build draws it and flies it
-         into the masthead, and a redraw already running should finish. Restarting from blank on
-         every pointerenter replayed it over and over — the mark sliding under a still cursor during
-         the build, or a hand drifting across the edge of a 28px target — and overwriting killed the
-         build's own stroke animation. */
-      if (gsap.isTweening(target) || strokes.some((stroke) => gsap.isTweening(stroke))) return;
+      /* Inert for the whole intro, not just while the mark itself moves: it lands in the masthead
+         seconds before the rest of the page finishes building, and a hover in that window replayed
+         the draw the intro had only just shown. The scroll lock is the intro's own marker — it holds
+         until the hero reports the build complete. A redraw already running is left to finish too,
+         or every re-entry across the edge of a 28px target blanks it and starts again. */
+      if (
+        document.documentElement.classList.contains('is-scroll-blocked') ||
+        strokes.some((stroke) => gsap.isTweening(stroke))
+      ) {
+        return;
+      }
 
       gsap.fromTo(
         strokes,
