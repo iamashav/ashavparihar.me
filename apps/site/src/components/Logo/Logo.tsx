@@ -30,23 +30,30 @@ export function Logo({ className }: LogoProps) {
       gsap.set(stroke, { strokeDasharray: stroke.getTotalLength() });
     });
 
+    /* Bound to the link so the whole hit area triggers it, not just the glyphs. */
+    const target = root.closest('a') ?? root;
+
     const redraw = () => {
+      /* Left alone while anything is already moving the mark: the hero build draws it and flies it
+         into the masthead, and a redraw already running should finish. Restarting from blank on
+         every pointerenter replayed it over and over — the mark sliding under a still cursor during
+         the build, or a hand drifting across the edge of a 28px target — and overwriting killed the
+         build's own stroke animation. */
+      if (gsap.isTweening(target) || strokes.some((stroke) => gsap.isTweening(stroke))) return;
+
       gsap.fromTo(
         strokes,
-        { strokeDashoffset: (_index, target: SVGPathElement) => target.getTotalLength() },
+        { strokeDashoffset: (_index, stroke: SVGPathElement) => stroke.getTotalLength() },
         {
           strokeDashoffset: 0,
           duration: 0.7,
           ease: 'power2.inOut',
           /* A trails P, so the mark writes itself letter by letter instead of both at once. */
           stagger: 0.12,
-          overwrite: true,
         },
       );
     };
 
-    /* Bound to the link so the whole hit area triggers it, not just the glyphs. */
-    const target = root.closest('a') ?? root;
     target.addEventListener('pointerenter', redraw);
 
     return () => {
